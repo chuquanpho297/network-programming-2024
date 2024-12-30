@@ -8,8 +8,8 @@ import java.util.ResourceBundle;
 
 import com.networking.auction.controller.Controller;
 import com.networking.auction.models.Room;
-import com.networking.auction.protocol.response.CreateRoomResponse;
-import com.networking.auction.protocol.response.GetAllOwnedRoomResponse;
+import com.networking.auction.protocol.response.room.CreateRoomResponse;
+import com.networking.auction.protocol.response.room.GetAllOwnedRoomResponse;
 import com.networking.auction.service.RoomService;
 import com.networking.auction.util.JavaFxUtil;
 
@@ -78,7 +78,6 @@ public class OwnedRoomController extends Controller implements Initializable {
             }
 
             roomList = (ArrayList<Room>) response.getLists();
-            System.out.println("Room list: " + roomList);
             totalOwnedRoomLabel.setText("Total Room: " + roomList.size());
             progressIndicator.setVisible(false);
             this.tableViewRoomController.addTableViewData(FXCollections.observableArrayList(roomList));

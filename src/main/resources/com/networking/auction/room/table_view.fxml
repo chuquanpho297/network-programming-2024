@@ -3,13 +3,12 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 
-<TableView fx:id="roomTableView" layoutY="9.0" prefHeight="714.0" prefWidth="1032.0"
-    xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.networking.auction.controller.room.TableViewRoomController">
+<TableView fx:id="roomTableView" layoutY="9.0" prefHeight="714.0" prefWidth="1032.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.networking.auction.controller.room.TableViewRoomController">
     <columns>
-        <TableColumn fx:id="roomIdColumn" prefWidth="197.0" text="Room ID" />
-        <TableColumn fx:id="roomNameColumn" prefWidth="168.0" text="Room Name" />
-        <TableColumn fx:id="ownerIdColumn" prefWidth="127.0" text="User ID" />
+        <TableColumn fx:id="roomIdColumn" maxWidth="0.0" minWidth="0.0" prefWidth="0.0" text="Room ID" />
+        <TableColumn fx:id="roomNameColumn" prefWidth="553.0" text="Room Name" />
+        <TableColumn fx:id="ownerIdColumn" prefWidth="338.0" text="User ID" />
+      <TableColumn fx:id="ownerIdColumn1" prefWidth="127.0" text="Action" />
     </columns>
     <columnResizePolicy>
         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

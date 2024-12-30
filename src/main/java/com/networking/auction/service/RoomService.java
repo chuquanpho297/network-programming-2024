@@ -6,9 +6,9 @@ import com.networking.auction.StateManager;
 import com.networking.auction.protocol.request.room.CreateRoomRequest;
 import com.networking.auction.protocol.request.room.GetAllOwnedRoomRequest;
 import com.networking.auction.protocol.request.room.GetAllRoomRequest;
-import com.networking.auction.protocol.response.CreateRoomResponse;
-import com.networking.auction.protocol.response.GetAllOwnedRoomResponse;
-import com.networking.auction.protocol.response.GetAllRoomResponse;
+import com.networking.auction.protocol.response.room.CreateRoomResponse;
+import com.networking.auction.protocol.response.room.GetAllOwnedRoomResponse;
+import com.networking.auction.protocol.response.room.GetAllRoomResponse;
 
 public class RoomService {
     private static RoomService instance;

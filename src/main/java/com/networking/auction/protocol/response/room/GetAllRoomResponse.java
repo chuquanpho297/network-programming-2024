@@ -1,9 +1,10 @@
-package com.networking.auction.protocol.response;
+package com.networking.auction.protocol.response.room;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.networking.auction.models.Room;
+import com.networking.auction.protocol.response.ListResponse;
 import com.networking.auction.util.ResponseEnum;
 import com.networking.auction.util.ResponseUtil;
 
@@ -24,13 +25,7 @@ public class GetAllRoomResponse extends ListResponse<Room> {
         List<Room> rooms = new ArrayList<Room>();
 
         while (!parts[roomNumber + 2].equals(ResponseUtil.END_TAG)) {
-            String[] roomParts = parts[roomNumber + 2].split(" ");
-
-            Room room = Room.builder()
-                    .roomId(roomParts[0])
-                    .roomName(roomParts[1])
-                    .ownerId(roomParts[2])
-                    .build();
+            Room room = Room.parseString(parts[roomNumber + 2]);
             rooms.add(room);
             roomNumber++;
         }

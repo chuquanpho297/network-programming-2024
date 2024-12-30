@@ -1,5 +1,7 @@
 package com.networking.auction;
 
+import java.util.Optional;
+
 import com.networking.auction.socket.TCPClient;
 
 import lombok.Getter;
@@ -15,20 +17,26 @@ public class StateManager {
 
     @Setter
     @Getter
-    private int userId;
+    private Optional<Integer> userId;
 
     @Setter
     @Getter
-    private String username;
+    private Optional<String> username;
 
     @Setter
     @Getter
-    private int roomId;
+    private Optional<Integer> roomId;
 
     public static StateManager getInstance() {
         if (instance == null) {
             instance = new StateManager();
         }
         return instance;
+    }
+
+    private StateManager() {
+        this.userId = Optional.empty();
+        this.username = Optional.empty();
+        this.roomId = Optional.empty();
     }
 }

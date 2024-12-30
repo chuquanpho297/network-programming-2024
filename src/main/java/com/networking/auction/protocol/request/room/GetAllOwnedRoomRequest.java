@@ -1,7 +1,5 @@
 package com.networking.auction.protocol.request.room;
 
-import java.util.Optional;
-
 import com.networking.auction.StateManager;
 import com.networking.auction.protocol.request.Request;
 import com.networking.auction.util.RequestEnum;
@@ -15,7 +13,7 @@ public class GetAllOwnedRoomRequest extends Request {
 
     @Builder
     public GetAllOwnedRoomRequest() {
-        this.userId = Optional.ofNullable(StateManager.getInstance().getUserId()).orElse(-1);
+        this.userId = StateManager.getInstance().getUserId().orElse(-1);
     }
 
     @Override

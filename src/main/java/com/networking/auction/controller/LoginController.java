@@ -3,11 +3,11 @@ package com.networking.auction.controller;
 import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.networking.auction.StateManager;
 import com.networking.auction.protocol.response.LoginResponse;
-import com.networking.auction.protocol.response.RegisterResponse;
 import com.networking.auction.service.UserService;
 import com.networking.auction.util.JavaFxUtil;
 
@@ -62,9 +62,9 @@ public class LoginController extends Controller implements Initializable {
                             JavaFxUtil.createAlert("Error Dialog", "Login Error", "Invalid username or password");
                             break;
                         case 1:
-                            StateManager.getInstance().setUserId(loginResponse.getUserId());
-                            StateManager.getInstance().setRoomId(loginResponse.getRoomId());
-                            StateManager.getInstance().setUsername(username.getText());
+                            StateManager.getInstance().setUserId(Optional.of(loginResponse.getUserId()));
+                            StateManager.getInstance().setRoomId(Optional.of(loginResponse.getRoomId()));
+                            StateManager.getInstance().setUsername(Optional.of(username.getText()));
                             switchToScreen((Stage) ((Node) event.getSource()).getScene().getWindow(), "room");
                             break;
                         case 2:

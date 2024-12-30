@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 
 import com.networking.auction.controller.Controller;
 import com.networking.auction.models.Room;
-import com.networking.auction.protocol.response.GetAllRoomResponse;
+import com.networking.auction.protocol.response.room.GetAllRoomResponse;
 import com.networking.auction.service.RoomService;
 import com.networking.auction.util.JavaFxUtil;
 

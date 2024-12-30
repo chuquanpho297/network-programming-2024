@@ -1,5 +1,6 @@
-package com.networking.auction.protocol.response;
+package com.networking.auction.protocol.response.room;
 
+import com.networking.auction.protocol.response.Response;
 import com.networking.auction.util.ResponseEnum;
 import com.networking.auction.util.ResponseUtil;
 

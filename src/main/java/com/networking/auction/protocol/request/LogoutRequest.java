@@ -1,7 +1,5 @@
 package com.networking.auction.protocol.request;
 
-import java.util.Optional;
-
 import com.networking.auction.StateManager;
 import com.networking.auction.util.RequestEnum;
 
@@ -14,7 +12,7 @@ public class LogoutRequest extends Request {
 
     @Builder
     public LogoutRequest() {
-        this.userId = Optional.ofNullable(StateManager.getInstance().getUserId()).orElse(-1);
+        this.userId = StateManager.getInstance().getUserId().orElse(-1);
     }
 
     @Override

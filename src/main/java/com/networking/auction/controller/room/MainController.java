@@ -7,6 +7,8 @@ import java.util.ResourceBundle;
 import com.networking.auction.HelloApplication;
 import com.networking.auction.StateManager;
 import com.networking.auction.controller.Controller;
+import com.networking.auction.controller.item.AllItemController;
+import com.networking.auction.controller.item.OwnedItemController;
 import com.networking.auction.protocol.response.LogoutResponse;
 import com.networking.auction.service.UserService;
 import com.networking.auction.util.JavaFxUtil;
@@ -23,7 +25,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class MainController extends Controller implements Initializable {
-    public Label homeLabel;
+    @FXML
+    private Label homeLabel;
+
     @FXML
     private VBox body;
 
@@ -43,21 +47,45 @@ public class MainController extends Controller implements Initializable {
     private Label ownedRoomListLabel;
 
     @FXML
+    private Label itemListLabel;
+
+    @FXML
+    private Label ownedItemListLabel;
+
+    @FXML
     private VBox screen;
 
     @FXML
     private VBox sidebar;
 
     @FXML
-    private Label title;
+    private Label titleLabel;
 
     @FXML
     private Label username;
 
     private final UserService userService = UserService.getInstance();
 
-    private void setMainBody(String fxmlPath, Controller controller) {
+    private static MainController instance;
+
+    private MainController() {
+        // Private constructor to prevent instantiation
+    }
+
+    public static MainController getInstance() {
+        if (instance == null) {
+            synchronized (MainController.class) {
+                if (instance == null) {
+                    instance = new MainController();
+                }
+            }
+        }
+        return instance;
+    }
+
+    public void setMainBody(String fxmlPath, Controller controller, String title) {
         progressIndicator.setVisible(false);
+        setTitle(title, titleLabel);
         try {
             body.getChildren().clear();
             FXMLLoader loader = new FXMLLoader();
@@ -73,18 +101,25 @@ public class MainController extends Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.username.setText("Hello, " + StateManager.getInstance().getUsername());
-        this.setMainBody("room/room.fxml", new RoomController(progressIndicator));
-        setTitle("Room List", title);
+        this.setMainBody("room/room.fxml", new RoomController(progressIndicator), "Room List");
 
         setClickable(roomListLabel, event -> {
-            this.setMainBody("room/room.fxml", new RoomController(progressIndicator));
-            setTitle("Room List", title);
+            this.setMainBody("room/room.fxml", new RoomController(progressIndicator), "Room List");
             return null;
         });
 
         setClickable(ownedRoomListLabel, event -> {
-            this.setMainBody("room/owned_room.fxml", new OwnedRoomController(progressIndicator));
-            setTitle("Owned Room List", title);
+            this.setMainBody("room/owned_room.fxml", new OwnedRoomController(progressIndicator), "Owned Room List");
+            return null;
+        });
+
+        setClickable(itemListLabel, event -> {
+            this.setMainBody("item/item.fxml", new AllItemController(progressIndicator), "Item List");
+            return null;
+        });
+
+        setClickable(ownedItemListLabel, event -> {
+            this.setMainBody("item/owned_item.fxml", new OwnedItemController(progressIndicator), "Owned Item List");
             return null;
         });
 

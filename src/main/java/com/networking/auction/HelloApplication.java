@@ -1,9 +1,14 @@
 package com.networking.auction;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import com.networking.auction.protocol.request.item.SearchItemRequest;
 import com.networking.auction.socket.TCPClient;
 import com.networking.auction.util.FxmlUtil;
 import com.networking.auction.util.JavaFxUtil;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -12,7 +17,8 @@ import javafx.stage.Stage;
 
 public class HelloApplication extends Application {
     public static void main(String[] args) {
-        TCPClient client = new TCPClient(3000, "192.168.1.29");
+        Dotenv dotenv = Dotenv.load();
+        TCPClient client = new TCPClient(Integer.parseInt(dotenv.get("SERVER_PORT")), dotenv.get("SERVER_ADDRESS"));
         StateManager.getInstance().setClientSocket(client);
         try {
             launch();

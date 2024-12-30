@@ -5,6 +5,7 @@ module com.networking.auction {
     requires java.logging;
     requires static lombok;
     requires javafx.graphics;
+    requires dotenv.java;
 
     exports com.networking.auction;
     exports com.networking.auction.controller;
