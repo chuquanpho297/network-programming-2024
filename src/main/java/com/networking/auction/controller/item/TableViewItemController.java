@@ -1,64 +1,75 @@
 package com.networking.auction.controller.item;
 
-import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.ResourceBundle;
 
 import com.networking.auction.models.Item;
-import com.networking.auction.models.Item.ItemStateEnum;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import lombok.Getter;
 
-@Getter
-public class TableViewItemController implements Initializable {
-    @FXML
-    private TableColumn<Item, Float> buyNowPriceColumn;
-
-    @FXML
-    private TableColumn<Item, Float> currentPriceColumn;
-
-    @FXML
-    private TableColumn<Item, LocalDateTime> endTimeColumn;
-
-    @FXML
-    private TableColumn<Item, Integer> itemIdColumn;
-
-    @FXML
-    private TableColumn<Item, String> itemNameColumn;
+public class TableViewItemController {
 
     @FXML
     private TableView<Item> itemTableView;
 
     @FXML
-    private TableColumn<Item, Integer> ownerIdColumn;
+    private TableColumn<Item, Integer> itemIdColumn;
 
     @FXML
-    private TableColumn<Item, Integer> roomIDColumn;
+    private TableColumn<Item, String> nameColumn;
 
     @FXML
     private TableColumn<Item, LocalDateTime> startTimeColumn;
 
     @FXML
-    private TableColumn<Item, ItemStateEnum> stateColumn;
+    private TableColumn<Item, LocalDateTime> endTimeColumn;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        itemTableView.getProperties().put("controller", this);
+    @FXML
+    private TableColumn<Item, Float> currentPriceColumn;
+
+    @FXML
+    private TableColumn<Item, Item.ItemStateEnum> stateColumn;
+
+    @FXML
+    private TableColumn<Item, Float> buyNowPriceColumn;
+
+    @FXML
+    private TableColumn<Item, Float> bidIncrementColumn;
+
+    @FXML
+    private TableColumn<Item, Integer> ownerIdColumn;
+
+    @FXML
+    private TableColumn<Item, Integer> roomIdColumn;
+
+    @FXML
+    private TableColumn<Item, String> ownerNameColumn;
+
+    @FXML
+    private TableColumn<Item, String> roomNameColumn;
+
+    private ObservableList<Item> itemList = FXCollections.observableArrayList();
+
+    @FXML
+    private void initialize() {
         itemIdColumn.setCellValueFactory(new PropertyValueFactory<>("itemId"));
-        itemNameColumn.setCellValueFactory(new PropertyValueFactory<>("itemName"));
-        buyNowPriceColumn.setCellValueFactory(new PropertyValueFactory<>("buyNowPrice"));
-        currentPriceColumn.setCellValueFactory(new PropertyValueFactory<>("currentPrice"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         startTimeColumn.setCellValueFactory(new PropertyValueFactory<>("startTime"));
         endTimeColumn.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+        currentPriceColumn.setCellValueFactory(new PropertyValueFactory<>("currentPrice"));
         stateColumn.setCellValueFactory(new PropertyValueFactory<>("state"));
+        buyNowPriceColumn.setCellValueFactory(new PropertyValueFactory<>("buyNowPrice"));
+        bidIncrementColumn.setCellValueFactory(new PropertyValueFactory<>("bidIncrement"));
         ownerIdColumn.setCellValueFactory(new PropertyValueFactory<>("ownerId"));
-        roomIDColumn.setCellValueFactory(new PropertyValueFactory<>("roomID"));
+        roomIdColumn.setCellValueFactory(new PropertyValueFactory<>("roomId"));
+        ownerNameColumn.setCellValueFactory(new PropertyValueFactory<>("ownerName"));
+        roomNameColumn.setCellValueFactory(new PropertyValueFactory<>("roomName"));
+
+        itemTableView.setItems(itemList);
     }
 
     public void addTableViewData(ObservableList<Item> roomObservableList) {
@@ -68,5 +79,4 @@ public class TableViewItemController implements Initializable {
     public void clearTableViewData() {
         itemTableView.getItems().clear();
     }
-
 }

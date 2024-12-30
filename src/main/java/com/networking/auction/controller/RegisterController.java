@@ -23,10 +23,10 @@ import javafx.stage.Stage;
 public class RegisterController extends Controller implements Initializable {
 
     @FXML
-    public Button registerButton;
+    private Button registerButton;
 
     @FXML
-    public Label login;
+    private Label login;
 
     @FXML
     private PasswordField password;

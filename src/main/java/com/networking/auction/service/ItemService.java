@@ -1,11 +1,12 @@
 package com.networking.auction.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import com.networking.auction.StateManager;
+import com.networking.auction.models.Item.ItemStateEnum;
 import com.networking.auction.protocol.request.item.CreateItemRequest;
 import com.networking.auction.protocol.request.item.GetAllItemInRoomRequest;
 import com.networking.auction.protocol.request.item.GetAllItemRequest;
@@ -65,9 +66,9 @@ public class ItemService {
         return null;
     }
 
-    public SearchItemResponse searchItem(Optional<String> itemName, Optional<LocalDate> startTime,
-            Optional<LocalDate> endTime,
-            Optional<Integer> roomId, Optional<Integer> userId) {
+    public SearchItemResponse searchItem(Optional<String> itemName, Optional<LocalDateTime> startTime,
+            Optional<LocalDateTime> endTime,
+            Optional<Integer> roomId, Optional<Integer> userId, Optional<List<ItemStateEnum>> states) {
         try {
             SearchItemRequest request = SearchItemRequest.builder()
                     .itemName(itemName)
@@ -75,6 +76,7 @@ public class ItemService {
                     .endTime(endTime)
                     .roomId(roomId)
                     .userId(userId)
+                    .states(states)
                     .build();
             String receiveMess = StateManager.getInstance().getClientSocket().sendAndReceive(request.toString());
             SearchItemResponse response = SearchItemResponse.parseResponse(receiveMess);
@@ -85,14 +87,13 @@ public class ItemService {
         return null;
     }
 
-    public CreateItemResponse createItem(String name, LocalDateTime startTime, LocalDateTime endTime,
-            float buyNowPrice) {
+    public CreateItemResponse createItem(String name,
+            Optional<Float> buyNowPrice, float bidIncrement) {
         try {
             CreateItemRequest request = CreateItemRequest.builder()
                     .name(name)
-                    .startTime(startTime)
-                    .endTime(endTime)
                     .buyNowPrice(buyNowPrice)
+                    .bidIncrement(bidIncrement)
                     .build();
             String receiveMess = StateManager.getInstance().getClientSocket().sendAndReceive(request.toString());
             CreateItemResponse response = CreateItemResponse.parseResponse(receiveMess);

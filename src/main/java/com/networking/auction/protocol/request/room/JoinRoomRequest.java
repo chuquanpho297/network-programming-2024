@@ -1,6 +1,5 @@
 package com.networking.auction.protocol.request.room;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import com.networking.auction.StateManager;
@@ -9,24 +8,23 @@ import com.networking.auction.util.RequestEnum;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
+@Setter
 @Getter
-public class CreateRoomRequest extends Request {
+public class JoinRoomRequest extends Request {
     private Optional<Integer> userId;
-    private String roomName;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private int roomId;
 
     @Builder
-    public CreateRoomRequest(String roomName, LocalDateTime startTime, LocalDateTime endTime) {
+    public JoinRoomRequest(int roomId) {
+        this.roomId = roomId;
         this.userId = StateManager.getInstance().getUserId();
-        this.roomName = roomName;
-        this.startTime = startTime;
-        this.endTime = endTime;
     }
 
     @Override
     public int getRequestType() {
-        return RequestEnum.CREATE_ROOM_REQ.getRequest();
+        return RequestEnum.JOIN_ROOM_REQ.getRequest();
     }
+
 }

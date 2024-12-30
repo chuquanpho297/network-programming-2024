@@ -1,7 +1,9 @@
 package com.networking.auction.protocol.request;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public abstract class Request {
 
@@ -18,7 +20,16 @@ public abstract class Request {
                 if (Optional.class.isAssignableFrom(field.getType())) {
                     Optional<?> optional = (Optional<?>) field.get(this);
                     if (optional.isPresent()) {
-                        result.append(optional.get().toString().trim()).append("\n");
+                        Object value = optional.get();
+                        if (value instanceof List) {
+                            List<?> list = (List<?>) value;
+                            String listString = list.stream()
+                                    .map(Object::toString)
+                                    .collect(Collectors.joining(" "));
+                            result.append(listString.trim()).append("\n");
+                        } else {
+                            result.append(value.toString().trim()).append("\n");
+                        }
                     } else {
                         result.append("NULL").append("\n");
                     }

@@ -6,6 +6,7 @@ module com.networking.auction {
     requires static lombok;
     requires javafx.graphics;
     requires dotenv.java;
+    requires javafx.base;
 
     exports com.networking.auction;
     exports com.networking.auction.controller;

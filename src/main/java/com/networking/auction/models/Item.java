@@ -21,6 +21,8 @@ public class Item {
     private float bidIncrement;
     private int ownerId;
     private int roomId;
+    private String ownerName;
+    private String roomName;
 
     public enum ItemStateEnum {
         UNSOLD("unsold"),
@@ -43,21 +45,23 @@ public class Item {
     public static Item parseString(String string) {
         String[] parts = string.split(" ");
 
-        if (parts.length != 10) {
+        if (parts.length != 12) {
             throw new IllegalArgumentException("Invalid user string");
         }
 
         return Item.builder()
                 .itemId(Integer.parseInt(parts[0]))
-                .name(parts[1])
+                .name(parts[1].replace("%20", " "))
                 .startTime(LocalDateTime.parse(parts[2]))
                 .endTime(LocalDateTime.parse(parts[3]))
                 .currentPrice(Float.parseFloat(parts[4]))
                 .state(ItemStateEnum.valueOf(parts[5]))
                 .buyNowPrice(Float.parseFloat(parts[6]))
-                .bidIncrement(Float.parseFloat(parts[7]))
                 .ownerId(Integer.parseInt(parts[8]))
                 .roomId(Integer.parseInt(parts[9]))
+                .ownerName(parts[10].replace("%20", " "))
+                .bidIncrement(Float.parseFloat(parts[7]))
+                .roomName(parts[11].replace("%20", " "))
                 .build();
     }
 }

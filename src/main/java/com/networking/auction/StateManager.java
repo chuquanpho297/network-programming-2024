@@ -27,6 +27,10 @@ public class StateManager {
     @Getter
     private Optional<Integer> roomId;
 
+    @Setter
+    @Getter
+    private Optional<String> mainFxmlPath;
+
     public static StateManager getInstance() {
         if (instance == null) {
             instance = new StateManager();

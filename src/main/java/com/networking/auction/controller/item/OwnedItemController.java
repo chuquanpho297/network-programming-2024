@@ -3,16 +3,16 @@ package com.networking.auction.controller.item;
 
 import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
 
+import java.io.IOException;
 import java.net.URL;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.networking.auction.StateManager;
 import com.networking.auction.controller.Controller;
-import com.networking.auction.controller.room.MainController;
 import com.networking.auction.models.Item;
-import com.networking.auction.protocol.response.item.CreateItemResponse;
 import com.networking.auction.protocol.response.item.GetAllOwnedItemResponse;
 import com.networking.auction.protocol.response.item.SearchItemResponse;
 import com.networking.auction.service.ItemService;
@@ -22,6 +22,7 @@ import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -29,6 +30,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.stage.Stage;
 
 public class OwnedItemController extends Controller implements Initializable {
     @FXML
@@ -68,20 +70,25 @@ public class OwnedItemController extends Controller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         tableViewItemController = (TableViewItemController) itemTableView.getProperties().get("controller");
         getObservableOwnedItemList();
-        createItemBtn.addEventHandler(MOUSE_CLICKED,
-                e -> MainController.getInstance().setMainBody("item/create_item.fxml", new CreateItemFormController(),
-                        "Create Room"));
+
+        createItemBtn.addEventHandler(MOUSE_CLICKED, e -> {
+            try {
+                switchToScreenNotStyle((Stage) ((Node) e.getSource()).getScene().getWindow(), "item/create_item.fxml");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        });
 
         startDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && endDatePicker.getValue() != null && !newValue.isBefore(endDatePicker.getValue())) {
-                endDatePicker.setValue(newValue.plusDays(1));
+            if (newValue != null && (endDatePicker.getValue() == null || newValue.isAfter(endDatePicker.getValue()))) {
+                endDatePicker.setValue(newValue);
             }
         });
 
         endDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && startDatePicker.getValue() != null
-                    && !newValue.isAfter(startDatePicker.getValue())) {
-                startDatePicker.setValue(newValue.minusDays(1));
+            if (newValue != null
+                    && (startDatePicker.getValue() == null || newValue.isBefore(startDatePicker.getValue()))) {
+                startDatePicker.setValue(newValue);
             }
         });
     }
@@ -123,9 +130,10 @@ public class OwnedItemController extends Controller implements Initializable {
             @Override
             protected SearchItemResponse call() {
                 return itemService.searchItem(Optional.of(itemNameField.getText()),
-                        Optional.of(startDatePicker.getValue()),
-                        Optional.of(endDatePicker.getValue()), Optional.empty(),
-                        StateManager.getInstance().getUserId());
+                        Optional.of(startDatePicker.getValue().atStartOfDay()),
+                        Optional.of(endDatePicker.getValue().atTime(LocalTime.MAX)),
+                        Optional.empty(),
+                        StateManager.getInstance().getUserId(), Optional.empty());
             }
         };
 
@@ -144,6 +152,7 @@ public class OwnedItemController extends Controller implements Initializable {
                         "Item search successfully");
                 ArrayList<Item> itemList = (ArrayList<Item>) response.getLists();
                 totalOwnedItemLabel.setText("Total Item: " + itemList.size());
+                this.tableViewItemController.clearTableViewData();
                 this.tableViewItemController.addTableViewData(FXCollections.observableArrayList(itemList));
             }
 

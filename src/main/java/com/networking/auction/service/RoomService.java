@@ -1,14 +1,17 @@
 package com.networking.auction.service;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import com.networking.auction.StateManager;
 import com.networking.auction.protocol.request.room.CreateRoomRequest;
 import com.networking.auction.protocol.request.room.GetAllOwnedRoomRequest;
 import com.networking.auction.protocol.request.room.GetAllRoomRequest;
+import com.networking.auction.protocol.request.room.JoinRoomRequest;
 import com.networking.auction.protocol.response.room.CreateRoomResponse;
 import com.networking.auction.protocol.response.room.GetAllOwnedRoomResponse;
 import com.networking.auction.protocol.response.room.GetAllRoomResponse;
+import com.networking.auction.protocol.response.room.JoinRoomResponse;
 
 public class RoomService {
     private static RoomService instance;
@@ -44,10 +47,12 @@ public class RoomService {
         return null;
     }
 
-    public CreateRoomResponse createRoom(String roomName) {
+    public CreateRoomResponse createRoom(String roomName, LocalDateTime startTime, LocalDateTime endTime) {
         try {
             CreateRoomRequest request = CreateRoomRequest.builder()
                     .roomName(roomName)
+                    .startTime(startTime)
+                    .endTime(endTime)
                     .build();
             String receiveMess = StateManager.getInstance().getClientSocket().sendAndReceive(request.toString());
             CreateRoomResponse response = CreateRoomResponse.parseResponse(receiveMess);
@@ -65,6 +70,20 @@ public class RoomService {
                     .build();
             String receiveMess = StateManager.getInstance().getClientSocket().sendAndReceive(request.toString());
             CreateRoomResponse response = CreateRoomResponse.parseResponse(receiveMess);
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public JoinRoomResponse joinRoom(int roomId) {
+        try {
+            JoinRoomRequest request = JoinRoomRequest.builder()
+                    .roomId(roomId)
+                    .build();
+            String receiveMess = StateManager.getInstance().getClientSocket().sendAndReceive(request.toString());
+            JoinRoomResponse response = JoinRoomResponse.parseResponse(receiveMess);
             return response;
         } catch (Exception e) {
             e.printStackTrace();

@@ -30,6 +30,16 @@ public class Controller {
         }
     }
 
+    public void switchToScreenNotStyle(Stage stage, String fxmlPath) throws IOException {
+        try {
+            Parent root = FXMLLoader
+                    .load(Objects.requireNonNull(HelloApplication.class.getResource(fxmlPath)));
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void setTitle(String title, Label titleLabel) {
         titleLabel.setText(title);
     }

@@ -17,6 +17,10 @@ public class SearchItemResponse extends ListResponse<Item> {
     public static SearchItemResponse parseResponse(String response) {
         String[] parts = ResponseUtil.separateResponse(response);
 
+        if (parts.length < 3) {
+            throw new IllegalArgumentException("Invalid response string");
+        }
+
         int respondCode = Integer.parseInt(parts[0]);
         int statusCode = Integer.parseInt(parts[1]);
 

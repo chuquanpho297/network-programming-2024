@@ -2,6 +2,7 @@ package com.networking.auction.controller.room;
 
 import java.net.URL;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.networking.auction.HelloApplication;
@@ -66,26 +67,14 @@ public class MainController extends Controller implements Initializable {
 
     private final UserService userService = UserService.getInstance();
 
-    private static MainController instance;
+    private final StateManager stateManager = StateManager.getInstance();
 
-    private MainController() {
-        // Private constructor to prevent instantiation
-    }
-
-    public static MainController getInstance() {
-        if (instance == null) {
-            synchronized (MainController.class) {
-                if (instance == null) {
-                    instance = new MainController();
-                }
-            }
-        }
-        return instance;
-    }
-
-    public void setMainBody(String fxmlPath, Controller controller, String title) {
+    public void setMainBody(String fxmlPath, Controller controller) {
         progressIndicator.setVisible(false);
+        String title = mapFxmlPathToTitle(fxmlPath);
         setTitle(title, titleLabel);
+        stateManager.setMainFxmlPath(Optional.of(fxmlPath));
+
         try {
             body.getChildren().clear();
             FXMLLoader loader = new FXMLLoader();
@@ -101,25 +90,26 @@ public class MainController extends Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.username.setText("Hello, " + StateManager.getInstance().getUsername());
-        this.setMainBody("room/room.fxml", new RoomController(progressIndicator), "Room List");
+        this.setMainBody(stateManager.getMainFxmlPath().orElse("room/room.fxml"),
+                new RoomController(progressIndicator));
 
         setClickable(roomListLabel, event -> {
-            this.setMainBody("room/room.fxml", new RoomController(progressIndicator), "Room List");
+            this.setMainBody("room/room.fxml", new RoomController(progressIndicator));
             return null;
         });
 
         setClickable(ownedRoomListLabel, event -> {
-            this.setMainBody("room/owned_room.fxml", new OwnedRoomController(progressIndicator), "Owned Room List");
+            this.setMainBody("room/owned_room.fxml", new OwnedRoomController(progressIndicator));
             return null;
         });
 
         setClickable(itemListLabel, event -> {
-            this.setMainBody("item/item.fxml", new AllItemController(progressIndicator), "Item List");
+            this.setMainBody("item/item.fxml", new AllItemController(progressIndicator));
             return null;
         });
 
         setClickable(ownedItemListLabel, event -> {
-            this.setMainBody("item/owned_item.fxml", new OwnedItemController(progressIndicator), "Owned Item List");
+            this.setMainBody("item/owned_item.fxml", new OwnedItemController(progressIndicator));
             return null;
         });
 
@@ -149,5 +139,20 @@ public class MainController extends Controller implements Initializable {
             return null;
         });
 
+    }
+
+    private String mapFxmlPathToTitle(String fxmlPath) {
+        switch (fxmlPath) {
+            case "room/room.fxml":
+                return "Room List";
+            case "room/owned_room.fxml":
+                return "Owned Room List";
+            case "item/item.fxml":
+                return "Item List";
+            case "item/owned_item.fxml":
+                return "Owned Item List";
+            default:
+                return "Home";
+        }
     }
 }

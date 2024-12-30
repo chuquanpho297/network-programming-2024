@@ -25,13 +25,13 @@ public class LoginController extends Controller implements Initializable {
 
     private final UserService userService = UserService.getInstance();
     @FXML
-    public PasswordField password;
+    private PasswordField password;
 
     @FXML
-    public TextField username;
+    private TextField username;
 
     @FXML
-    public Label register;
+    private Label register;
 
     @FXML
     private Button loginButton;
@@ -58,7 +58,7 @@ public class LoginController extends Controller implements Initializable {
                     }
 
                     switch (loginResponse.getStatusCode()) {
-                        case 0:
+                        case 3:
                             JavaFxUtil.createAlert("Error Dialog", "Login Error", "Invalid username or password");
                             break;
                         case 1:
@@ -70,6 +70,8 @@ public class LoginController extends Controller implements Initializable {
                         case 2:
                             JavaFxUtil.createAlert("Error Dialog", "Login Error", "User already logged in");
                             break;
+                        case 0:
+                            JavaFxUtil.createAlert("Error Dialog", "Login Error", "Server error");
                         default:
                             throw new IllegalArgumentException("Invalid status code");
                     }

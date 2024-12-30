@@ -9,9 +9,9 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @SuperBuilder
-public class CreateRoomResponse extends Response {
+public class JoinRoomResponse extends Response {
 
-    public static CreateRoomResponse parseResponse(String response) {
+    public static JoinRoomResponse parseResponse(String response) {
         String[] parts = ResponseUtil.separateResponse(response);
 
         if (parts.length != 3) {
@@ -21,11 +21,11 @@ public class CreateRoomResponse extends Response {
         int respondCode = Integer.parseInt(parts[0]);
         int statusCode = Integer.parseInt(parts[1]);
 
-        if (respondCode != ResponseEnum.CREATE_ROOM_RES.getResponse()) {
+        if (respondCode != ResponseEnum.JOIN_ROOM_RES.getResponse()) {
             throw new IllegalArgumentException("Invalid response code");
         }
 
-        return CreateRoomResponse.builder()
+        return JoinRoomResponse.builder()
                 .respondCode(respondCode)
                 .statusCode(statusCode)
                 .build();
