@@ -69,9 +69,10 @@ public class MainController extends Controller implements Initializable {
 
     private final StateManager stateManager = StateManager.getInstance();
 
-    public void setMainBody(String fxmlPath, Controller controller) {
+    public void setMainBody(String fxmlPath) {
         progressIndicator.setVisible(false);
         String title = mapFxmlPathToTitle(fxmlPath);
+        Controller controller1 = getController(fxmlPath);
         setTitle(title, titleLabel);
         stateManager.setMainFxmlPath(Optional.of(fxmlPath));
 
@@ -79,7 +80,7 @@ public class MainController extends Controller implements Initializable {
             body.getChildren().clear();
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(HelloApplication.class.getResource(fxmlPath));
-            loader.setController(controller);
+            loader.setController(controller1);
             Node node = loader.load();
             body.getChildren().add(node);
         } catch (Exception e) {
@@ -89,27 +90,26 @@ public class MainController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        this.username.setText("Hello, " + StateManager.getInstance().getUsername());
-        this.setMainBody(stateManager.getMainFxmlPath().orElse("room/room.fxml"),
-                new RoomController(progressIndicator));
+        this.username.setText("Hello, " + StateManager.getInstance().getUsername().orElse("User"));
+        this.setMainBody(stateManager.getMainFxmlPath().orElse("room/room.fxml"));
 
         setClickable(roomListLabel, event -> {
-            this.setMainBody("room/room.fxml", new RoomController(progressIndicator));
+            this.setMainBody("room/room.fxml");
             return null;
         });
 
         setClickable(ownedRoomListLabel, event -> {
-            this.setMainBody("room/owned_room.fxml", new OwnedRoomController(progressIndicator));
+            this.setMainBody("room/owned_room.fxml");
             return null;
         });
 
         setClickable(itemListLabel, event -> {
-            this.setMainBody("item/item.fxml", new AllItemController(progressIndicator));
+            this.setMainBody("item/item.fxml");
             return null;
         });
 
         setClickable(ownedItemListLabel, event -> {
-            this.setMainBody("item/owned_item.fxml", new OwnedItemController(progressIndicator));
+            this.setMainBody("item/owned_item.fxml");
             return null;
         });
 
@@ -153,6 +153,21 @@ public class MainController extends Controller implements Initializable {
                 return "Owned Item List";
             default:
                 return "Home";
+        }
+    }
+
+    private Controller getController(String fxmlPath) {
+        switch (fxmlPath) {
+            case "room/room.fxml":
+                return new RoomController(progressIndicator);
+            case "room/owned_room.fxml":
+                return new OwnedRoomController(progressIndicator);
+            case "item/item.fxml":
+                return new AllItemController(progressIndicator);
+            case "item/owned_item.fxml":
+                return new OwnedItemController(progressIndicator);
+            default:
+                return new RoomController(progressIndicator);
         }
     }
 }

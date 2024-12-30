@@ -1,17 +1,19 @@
 package com.networking.auction.controller.item;
 
+import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.ResourceBundle;
 
 import com.networking.auction.models.Item;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class TableViewItemController {
+public class TableViewItemController implements Initializable {
 
     @FXML
     private TableView<Item> itemTableView;
@@ -38,9 +40,6 @@ public class TableViewItemController {
     private TableColumn<Item, Float> buyNowPriceColumn;
 
     @FXML
-    private TableColumn<Item, Float> bidIncrementColumn;
-
-    @FXML
     private TableColumn<Item, Integer> ownerIdColumn;
 
     @FXML
@@ -52,10 +51,8 @@ public class TableViewItemController {
     @FXML
     private TableColumn<Item, String> roomNameColumn;
 
-    private ObservableList<Item> itemList = FXCollections.observableArrayList();
-
-    @FXML
-    private void initialize() {
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         itemIdColumn.setCellValueFactory(new PropertyValueFactory<>("itemId"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         startTimeColumn.setCellValueFactory(new PropertyValueFactory<>("startTime"));
@@ -63,17 +60,15 @@ public class TableViewItemController {
         currentPriceColumn.setCellValueFactory(new PropertyValueFactory<>("currentPrice"));
         stateColumn.setCellValueFactory(new PropertyValueFactory<>("state"));
         buyNowPriceColumn.setCellValueFactory(new PropertyValueFactory<>("buyNowPrice"));
-        bidIncrementColumn.setCellValueFactory(new PropertyValueFactory<>("bidIncrement"));
         ownerIdColumn.setCellValueFactory(new PropertyValueFactory<>("ownerId"));
         roomIdColumn.setCellValueFactory(new PropertyValueFactory<>("roomId"));
         ownerNameColumn.setCellValueFactory(new PropertyValueFactory<>("ownerName"));
         roomNameColumn.setCellValueFactory(new PropertyValueFactory<>("roomName"));
-
-        itemTableView.setItems(itemList);
+        itemTableView.getProperties().put("controller", this);
     }
 
-    public void addTableViewData(ObservableList<Item> roomObservableList) {
-        itemTableView.setItems(roomObservableList);
+    public void addTableViewData(ObservableList<Item> itemObservableList) {
+        itemTableView.setItems(itemObservableList);
     }
 
     public void clearTableViewData() {

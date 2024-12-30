@@ -1,7 +1,5 @@
 package com.networking.auction.protocol.request.item;
 
-import java.util.Optional;
-
 import com.networking.auction.StateManager;
 import com.networking.auction.protocol.request.Request;
 import com.networking.auction.util.RequestEnum;
@@ -11,11 +9,11 @@ import lombok.Getter;
 
 @Getter
 public class GetAllOwnedItemRequest extends Request {
-    private Optional<Integer> userId;
+    private int userId;
 
     @Builder
     public GetAllOwnedItemRequest() {
-        this.userId = StateManager.getInstance().getUserId();
+        this.userId = StateManager.getInstance().getUserId().orElseThrow();
     }
 
     @Override

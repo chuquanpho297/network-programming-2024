@@ -51,8 +51,6 @@ public class RoomService {
         try {
             CreateRoomRequest request = CreateRoomRequest.builder()
                     .roomName(roomName)
-                    .startTime(startTime)
-                    .endTime(endTime)
                     .build();
             String receiveMess = StateManager.getInstance().getClientSocket().sendAndReceive(request.toString());
             CreateRoomResponse response = CreateRoomResponse.parseResponse(receiveMess);
@@ -63,7 +61,7 @@ public class RoomService {
         return null;
     }
 
-    public CreateRoomResponse createRoom(String roomName, int ownerId) {
+    public CreateRoomResponse createRoom(String roomName) {
         try {
             CreateRoomRequest request = CreateRoomRequest.builder()
                     .roomName(roomName)

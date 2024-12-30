@@ -1,8 +1,11 @@
 package com.networking.auction.models;
 
-import java.time.LocalDateTime;
-
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -14,8 +17,6 @@ public class Room {
     private int roomId;
     private String roomName;
     private int ownerId;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
     private int totalItems;
     private int totalParticipants;
     private String ownerName;
@@ -23,7 +24,7 @@ public class Room {
     public static Room parseString(String string) {
         String[] parts = string.split(" ");
 
-        if (parts.length != 8) {
+        if (parts.length != 6) {
             throw new IllegalArgumentException("Invalid user string");
         }
 
@@ -32,10 +33,8 @@ public class Room {
                 .roomName(parts[1].replace("%20", " "))
                 .ownerId(Integer.parseInt(parts[2]))
                 .ownerName(parts[3].replace("%20", " "))
-                .startTime(LocalDateTime.parse(parts[4]))
-                .endTime(LocalDateTime.parse(parts[5]))
-                .totalItems(Integer.parseInt(parts[6]))
-                .totalParticipants(Integer.parseInt(parts[7]))
+                .totalItems(Integer.parseInt(parts[4]))
+                .totalParticipants(Integer.parseInt(parts[5]))
                 .build();
     }
 }

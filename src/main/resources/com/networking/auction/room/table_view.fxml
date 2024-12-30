@@ -9,8 +9,6 @@
         <TableColumn fx:id="ownerNameColumn" prefWidth="150.0" text="Owner Name" />
         <TableColumn fx:id="totalItemsColumn" prefWidth="100.0" text="Total Items" />
         <TableColumn fx:id="totalParticipantsColumn" prefWidth="150.0" text="Total Participants" />
-        <TableColumn fx:id="startTimeColumn" prefWidth="150.0" text="Start Time" />
-        <TableColumn fx:id="endTimeColumn" prefWidth="150.0" text="End Time" />
         <TableColumn fx:id="ownerIdColumn" visible="false" text="Owner ID" />
         <TableColumn fx:id="roomIdColumn" visible="false" text="Room ID" />
     </columns>

@@ -57,8 +57,6 @@ public class AllItemController extends Controller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         tableViewItemController = (TableViewItemController) itemTableView.getProperties().get("controller");
 
-        getObservableAllItemList();
-
         startDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && (endDatePicker.getValue() == null || newValue.isAfter(endDatePicker.getValue()))) {
                 endDatePicker.setValue(newValue);
@@ -73,6 +71,8 @@ public class AllItemController extends Controller implements Initializable {
         });
 
         searchItemBtn.setOnAction(event -> searchItem());
+
+        getObservableAllItemList();
     }
 
     public void getObservableAllItemList() {
@@ -116,7 +116,7 @@ public class AllItemController extends Controller implements Initializable {
                         Optional.of(endDatePicker.getValue().atTime(LocalTime.MAX)),
                         Optional.empty(),
                         Optional.empty(),
-                        Optional.of(List.of(ItemStateEnum.ACTIVE, ItemStateEnum.LISTED)));
+                        Optional.of(List.of(ItemStateEnum.ACTIVE, ItemStateEnum.WAITING)));
             }
         };
 

@@ -3,7 +3,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 
-<TableView fx:id="itemTableView" layoutY="9.0" prefHeight="714.0" prefWidth="1032.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.networking.auction.controller.room.TableViewItemController">
+<TableView fx:id="itemTableView" layoutY="9.0" prefHeight="714.0" prefWidth="1032.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.networking.auction.controller.item.TableViewItemController">
     <columns>
         <TableColumn fx:id="itemIdColumn" visible="false" text="Item ID" />
         <TableColumn fx:id="nameColumn" text="Name" />
@@ -11,7 +11,6 @@
         <TableColumn fx:id="roomNameColumn" text="Room Name" />
         <TableColumn fx:id="currentPriceColumn" text="Current Price" />
         <TableColumn fx:id="buyNowPriceColumn" text="Buy Now Price" />
-        <TableColumn fx:id="bidIncrementColumn" text="Bid Increment" />
         <TableColumn fx:id="stateColumn" text="State" />
         <TableColumn fx:id="startTimeColumn" text="Start Time" />
         <TableColumn fx:id="endTimeColumn" text="End Time" />

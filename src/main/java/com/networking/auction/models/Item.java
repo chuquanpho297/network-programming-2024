@@ -18,17 +18,16 @@ public class Item {
     private float currentPrice;
     private ItemStateEnum state;
     private float buyNowPrice;
-    private float bidIncrement;
     private int ownerId;
     private int roomId;
     private String ownerName;
     private String roomName;
 
     public enum ItemStateEnum {
-        UNSOLD("unsold"),
-        LISTED("listed"),
+        CREATED("created"),
+        WAITING("waiting"),
         ACTIVE("active"),
-        SOLD("unsold");
+        SOLD("sold");
 
         private final String state;
 
@@ -60,7 +59,6 @@ public class Item {
                 .ownerId(Integer.parseInt(parts[8]))
                 .roomId(Integer.parseInt(parts[9]))
                 .ownerName(parts[10].replace("%20", " "))
-                .bidIncrement(Float.parseFloat(parts[7]))
                 .roomName(parts[11].replace("%20", " "))
                 .build();
     }

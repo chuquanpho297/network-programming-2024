@@ -22,12 +22,6 @@
         <Label text="Room Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
         <TextField fx:id="roomNameField" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
         
-        <Label text="Date:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-        <DatePicker fx:id="datePicker" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-        
-        <Label text="Time slot:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-        <ComboBox fx:id="timeSlotBox" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-        
-        <Button fx:id="createRoomBtn" text="Create Room" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+        <Button fx:id="createRoomBtn" text="Create Room" GridPane.columnIndex="1" GridPane.rowIndex="1" />
     </GridPane>
 </VBox>

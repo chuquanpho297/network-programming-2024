@@ -42,5 +42,6 @@ public class StateManager {
         this.userId = Optional.empty();
         this.username = Optional.empty();
         this.roomId = Optional.empty();
+        this.mainFxmlPath = Optional.empty();
     }
 }

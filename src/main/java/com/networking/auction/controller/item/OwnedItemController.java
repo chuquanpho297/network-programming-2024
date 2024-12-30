@@ -29,7 +29,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class OwnedItemController extends Controller implements Initializable {
@@ -52,7 +52,7 @@ public class OwnedItemController extends Controller implements Initializable {
     private Button searchItemBtn;
 
     @FXML
-    private TextArea itemNameField;
+    private TextField itemNameField;
 
     @FXML
     private DatePicker startDatePicker;
@@ -69,7 +69,6 @@ public class OwnedItemController extends Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         tableViewItemController = (TableViewItemController) itemTableView.getProperties().get("controller");
-        getObservableOwnedItemList();
 
         createItemBtn.addEventHandler(MOUSE_CLICKED, e -> {
             try {
@@ -91,6 +90,8 @@ public class OwnedItemController extends Controller implements Initializable {
                 startDatePicker.setValue(newValue);
             }
         });
+
+        getObservableOwnedItemList();
     }
 
     public void getObservableOwnedItemList() {

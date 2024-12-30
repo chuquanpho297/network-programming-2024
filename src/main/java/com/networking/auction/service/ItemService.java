@@ -88,12 +88,13 @@ public class ItemService {
     }
 
     public CreateItemResponse createItem(String name,
-            Optional<Float> buyNowPrice, float bidIncrement) {
+            float buyNowPrice, LocalDateTime startTime, LocalDateTime endTime) {
         try {
             CreateItemRequest request = CreateItemRequest.builder()
                     .name(name)
                     .buyNowPrice(buyNowPrice)
-                    .bidIncrement(bidIncrement)
+                    .startTime(startTime)
+                    .endTime(endTime)
                     .build();
             String receiveMess = StateManager.getInstance().getClientSocket().sendAndReceive(request.toString());
             CreateItemResponse response = CreateItemResponse.parseResponse(receiveMess);

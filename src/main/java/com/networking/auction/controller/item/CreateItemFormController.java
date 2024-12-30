@@ -2,7 +2,12 @@ package com.networking.auction.controller.item;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import com.networking.auction.controller.Controller;
@@ -16,6 +21,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -28,18 +35,24 @@ public class CreateItemFormController extends Controller implements Initializabl
     private TextField buyNowPriceField;
 
     @FXML
-    private TextField bidIncrementField;
-
-    @FXML
     private Button createItemBtn;
 
     @FXML
     private Button backButton;
 
+    @FXML
+    private DatePicker datePicker;
+
+    @FXML
+    private ComboBox<String> timeSlotBox;
+
     private final ItemService itemService = ItemService.getInstance();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // Initialize ComboBox with time options
+        timeSlotBox.getItems().addAll(generateTimeSlots());
+
         backButton.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
                 event -> {
                     try {
@@ -50,29 +63,52 @@ public class CreateItemFormController extends Controller implements Initializabl
                 });
     }
 
+    // TODO: change time slots
+    private List<String> generateTimeSlots() {
+        List<String> timeSlots = new ArrayList<>();
+        LocalTime now = LocalTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        LocalTime slot1Start = now.plusMinutes(5);
+        LocalTime slot1End = slot1Start.plusMinutes(5);
+        LocalTime slot2Start = slot1End.plusMinutes(5);
+        LocalTime slot2End = slot2Start.plusMinutes(5);
+
+        timeSlots.add(slot1Start.format(formatter) + " - " + slot1End.format(formatter));
+        timeSlots.add(slot2Start.format(formatter) + " - " + slot2End.format(formatter));
+
+        return timeSlots;
+    }
+
     @FXML
     private void handleSubmitButtonAction() {
         try {
             String name = nameField.getText();
-            String buyNowPriceStr = buyNowPriceField.getText();
-            String bidIncrementStr = bidIncrementField.getText();
+            LocalDate date = datePicker.getValue();
+            String timeSlot = timeSlotBox.getValue();
+            float buyNowPrice = Float.parseFloat(buyNowPriceField.getText());
 
-            if (name.isEmpty() || bidIncrementStr.isEmpty()) {
-                JavaFxUtil.createAlert("Error Dialog", "Create Item Error", "Invalid input");
+            if (name.isEmpty() || date == null || timeSlot == null) {
+                JavaFxUtil.createAlert("Error Dialog", "Room Error", "Room name cannot be empty");
                 return;
             }
 
-            Optional<Float> buyNowPrice = buyNowPriceStr.isEmpty() ? Optional.empty()
-                    : Optional.of(Float.parseFloat(buyNowPriceStr));
+            // Parse the time slot to get start and end times
+            String[] times = timeSlot.split(" - ");
+            LocalTime startTime = LocalTime.parse(times[0]);
+            LocalTime endTime = LocalTime.parse(times[1]);
 
-            float bidIncrement = Float.parseFloat(bidIncrementStr);
+            // Combine date and time to get LocalDateTime
+            LocalDateTime startDateTime = LocalDateTime.of(date, startTime);
+            LocalDateTime endDateTime = LocalDateTime.of(date, endTime);
 
             Task<CreateItemResponse> task = new Task<>() {
                 @Override
                 protected CreateItemResponse call() {
                     return itemService.createItem(name,
                             buyNowPrice,
-                            bidIncrement);
+                            startDateTime,
+                            endDateTime);
                 }
             };
 
@@ -101,7 +137,6 @@ public class CreateItemFormController extends Controller implements Initializabl
                 createItemBtn.setText("Create Item");
                 nameField.clear();
                 buyNowPriceField.clear();
-                bidIncrementField.clear();
 
             });
             task.setOnFailed((e) -> {
@@ -113,7 +148,6 @@ public class CreateItemFormController extends Controller implements Initializabl
                 createItemBtn.setText("Create Item");
                 nameField.clear();
                 buyNowPriceField.clear();
-                bidIncrementField.clear();
             });
 
             new Thread(task).start();
