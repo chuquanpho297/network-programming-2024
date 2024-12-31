@@ -2,10 +2,12 @@ package com.networking.auction.controller.item;
 
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.networking.auction.models.Item;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -64,6 +66,12 @@ public class TableViewItemController implements Initializable {
         roomIdColumn.setCellValueFactory(new PropertyValueFactory<>("roomId"));
         ownerNameColumn.setCellValueFactory(new PropertyValueFactory<>("ownerName"));
         roomNameColumn.setCellValueFactory(new PropertyValueFactory<>("roomName"));
+
+        roomIdColumn.setCellValueFactory(
+                cellData -> new SimpleObjectProperty<>(cellData.getValue().getRoomId().orElse(null)));
+        roomNameColumn.setCellValueFactory(
+                cellData -> new SimpleObjectProperty<>(cellData.getValue().getRoomName().orElse("")));
+
         itemTableView.getProperties().put("controller", this);
     }
 

@@ -15,9 +15,9 @@ import lombok.Setter;
 @Setter
 public class CreateItemRequest extends Request {
     private String name;
+    private float buyNowPrice;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private float buyNowPrice;
     private int ownerId;
 
     @Builder

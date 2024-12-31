@@ -11,9 +11,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class CreateItemResponse extends Response {
     public static CreateItemResponse parseResponse(String response) {
-        String[] parts = ResponseUtil.separateResponse(response);
+        String[] parts = ResponseUtil.separateResponseWithoutEndTag(response);
 
-        if (parts.length != 3) {
+        if (parts.length != 2) {
             throw new IllegalArgumentException("Invalid response format");
         }
 

@@ -91,6 +91,8 @@ public class OwnedItemController extends Controller implements Initializable {
             }
         });
 
+        searchItemBtn.addEventHandler(MOUSE_CLICKED, e -> searchItem());
+
         getObservableOwnedItemList();
     }
 
@@ -141,6 +143,7 @@ public class OwnedItemController extends Controller implements Initializable {
         task.setOnRunning((e) -> {
             searchItemBtn.setDisable(true);
             searchItemBtn.setText("Searching...");
+            progressIndicator.setVisible(true);
         });
         task.setOnSucceeded((e) -> {
             SearchItemResponse response = task.getValue();
@@ -159,6 +162,7 @@ public class OwnedItemController extends Controller implements Initializable {
 
             searchItemBtn.setDisable(false);
             searchItemBtn.setText("Search Item");
+            progressIndicator.setVisible(false);
 
         });
         task.setOnFailed((e) -> {
@@ -167,6 +171,7 @@ public class OwnedItemController extends Controller implements Initializable {
             JavaFxUtil.createAlert("Error Dialog", "Item Error", "An error occurred during item search");
             searchItemBtn.setDisable(false);
             searchItemBtn.setText("Search Item");
+            progressIndicator.setVisible(false);
         });
 
         new Thread(task).start();

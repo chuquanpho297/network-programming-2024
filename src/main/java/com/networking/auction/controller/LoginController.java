@@ -62,8 +62,8 @@ public class LoginController extends Controller implements Initializable {
                             JavaFxUtil.createAlert("Error Dialog", "Login Error", "Invalid username or password");
                             break;
                         case 1:
-                            StateManager.getInstance().setUserId(Optional.of(loginResponse.getUserId()));
-                            StateManager.getInstance().setRoomId(Optional.of(loginResponse.getRoomId()));
+                            StateManager.getInstance().setUserId(loginResponse.getUserId());
+                            StateManager.getInstance().setRoomId(loginResponse.getRoomId());
                             StateManager.getInstance().setUsername(Optional.of(username.getText()));
                             switchToScreen((Stage) ((Node) event.getSource()).getScene().getWindow(), "room");
                             break;

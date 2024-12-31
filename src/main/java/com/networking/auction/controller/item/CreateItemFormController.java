@@ -61,6 +61,7 @@ public class CreateItemFormController extends Controller implements Initializabl
                         e.printStackTrace();
                     }
                 });
+        createItemBtn.setOnAction(event -> handleSubmitButtonAction());
     }
 
     // TODO: change time slots
@@ -89,7 +90,7 @@ public class CreateItemFormController extends Controller implements Initializabl
             float buyNowPrice = Float.parseFloat(buyNowPriceField.getText());
 
             if (name.isEmpty() || date == null || timeSlot == null) {
-                JavaFxUtil.createAlert("Error Dialog", "Room Error", "Room name cannot be empty");
+                JavaFxUtil.createAlert("Error Dialog", "Room Error", "Invalid input");
                 return;
             }
 

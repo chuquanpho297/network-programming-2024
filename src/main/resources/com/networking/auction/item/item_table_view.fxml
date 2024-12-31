@@ -16,6 +16,8 @@
         <TableColumn fx:id="endTimeColumn" text="End Time" />
         <TableColumn fx:id="ownerIdColumn" visible="false" text="Owner ID" />
         <TableColumn fx:id="roomIdColumn" visible="false" text="Room ID" />
+        <TableColumn fx:id="actionColumn" text="Actions" />
+
     </columns>
     <columnResizePolicy>
         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

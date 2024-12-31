@@ -12,9 +12,9 @@ import lombok.experimental.SuperBuilder;
 public class JoinRoomResponse extends Response {
 
     public static JoinRoomResponse parseResponse(String response) {
-        String[] parts = ResponseUtil.separateResponse(response);
+        String[] parts = ResponseUtil.separateResponseWithoutEndTag(response);
 
-        if (parts.length != 3) {
+        if (parts.length != 2) {
             throw new IllegalArgumentException("Invalid response format");
         }
 

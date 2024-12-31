@@ -1,6 +1,8 @@
 package com.networking.auction.models;
 
+import java.lang.StackWalker.Option;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import lombok.*;
 
@@ -19,9 +21,9 @@ public class Item {
     private ItemStateEnum state;
     private float buyNowPrice;
     private int ownerId;
-    private int roomId;
+    private Optional<Integer> roomId;
     private String ownerName;
-    private String roomName;
+    private Optional<String> roomName;
 
     public enum ItemStateEnum {
         CREATED("created"),
@@ -44,9 +46,10 @@ public class Item {
     public static Item parseString(String string) {
         String[] parts = string.split(" ");
 
-        if (parts.length != 12) {
+        if (parts.length != 11) {
             throw new IllegalArgumentException("Invalid user string");
         }
+
 
         return Item.builder()
                 .itemId(Integer.parseInt(parts[0]))
@@ -54,12 +57,12 @@ public class Item {
                 .startTime(LocalDateTime.parse(parts[2]))
                 .endTime(LocalDateTime.parse(parts[3]))
                 .currentPrice(Float.parseFloat(parts[4]))
-                .state(ItemStateEnum.valueOf(parts[5]))
+                .state(ItemStateEnum.valueOf(parts[5].toUpperCase()))
                 .buyNowPrice(Float.parseFloat(parts[6]))
-                .ownerId(Integer.parseInt(parts[8]))
-                .roomId(Integer.parseInt(parts[9]))
+                .ownerId(Integer.parseInt(parts[7]))
+                .roomId(parts[8].equals("NULL") ? Optional.empty() : Optional.of(Integer.parseInt(parts[8])))
+                .roomName(parts[9].equals("NULL") ? Optional.empty() : Optional.of(parts[9].replace("%20", " ")))
                 .ownerName(parts[10].replace("%20", " "))
-                .roomName(parts[11].replace("%20", " "))
                 .build();
     }
 }

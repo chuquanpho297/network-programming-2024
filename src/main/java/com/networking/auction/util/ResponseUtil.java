@@ -10,5 +10,10 @@ public class ResponseUtil {
         return parts;
     }
 
+    public static String[] separateResponseWithoutEndTag(String response) {
+        String[] parts = separateResponse(response);
+        return Arrays.copyOf(parts, parts.length - 1);
+    }
+
     public final static String END_TAG = "End";
 }
