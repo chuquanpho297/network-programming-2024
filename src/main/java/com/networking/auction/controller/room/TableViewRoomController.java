@@ -11,7 +11,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import lombok.Getter;
 
+@Getter
 public class TableViewRoomController implements Initializable {
     @FXML
     private TableView<Room> roomTableView;
@@ -32,6 +34,9 @@ public class TableViewRoomController implements Initializable {
 
     @FXML
     private TableColumn<Room, String> ownerNameColumn;
+
+    @FXML
+    private TableColumn<Room, Void> actionColumn;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

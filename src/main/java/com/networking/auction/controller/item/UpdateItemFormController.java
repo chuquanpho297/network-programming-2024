@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import com.networking.auction.controller.Controller;
-import com.networking.auction.protocol.response.item.CreateItemResponse;
+import com.networking.auction.models.Item;
+import com.networking.auction.protocol.response.item.UpdateItemResponse;
 import com.networking.auction.service.ItemService;
 import com.networking.auction.util.JavaFxUtil;
 
@@ -26,7 +27,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class CreateItemFormController extends Controller implements Initializable {
+public class UpdateItemFormController extends Controller implements Initializable {
 
     @FXML
     private TextField nameField;
@@ -35,7 +36,7 @@ public class CreateItemFormController extends Controller implements Initializabl
     private TextField buyNowPriceField;
 
     @FXML
-    private Button createItemBtn;
+    private Button updateItemBtn;
 
     @FXML
     private Button backButton;
@@ -47,11 +48,22 @@ public class CreateItemFormController extends Controller implements Initializabl
     private ComboBox<String> timeSlotBox;
 
     private final ItemService itemService = ItemService.getInstance();
+    private Item item;
+
+    UpdateItemFormController(Item item) {
+        this.item = item;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Initialize ComboBox with time options
         timeSlotBox.getItems().addAll(generateTimeSlots());
+        nameField.setText(item.getName());
+        buyNowPriceField.setText(String.valueOf(item.getBuyNowPrice()));
+        LocalDateTime startDateTime = item.getStartTime();
+        datePicker.setValue(startDateTime.toLocalDate());
+        timeSlotBox.setValue(startDateTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")) + " - " +
+                item.getEndTime().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")));
 
         backButton.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
                 event -> {
@@ -61,10 +73,9 @@ public class CreateItemFormController extends Controller implements Initializabl
                         e.printStackTrace();
                     }
                 });
-        createItemBtn.setOnAction(event -> handleSubmitButtonAction());
+        updateItemBtn.setOnAction(event -> handleSubmitButtonAction());
     }
 
-    // TODO: change time slots
     private List<String> generateTimeSlots() {
         List<String> timeSlots = new ArrayList<>();
         LocalTime now = LocalTime.now();
@@ -74,12 +85,9 @@ public class CreateItemFormController extends Controller implements Initializabl
         LocalTime slot1End = slot1Start.plusMinutes(5);
         LocalTime slot2Start = slot1End.plusMinutes(5);
         LocalTime slot2End = slot2Start.plusMinutes(5);
-        LocalTime slot3Start = slot2End.plusMinutes(5);
-        LocalTime slot3End = slot3Start.plusMinutes(5);
 
         timeSlots.add(slot1Start.format(formatter) + " - " + slot1End.format(formatter));
         timeSlots.add(slot2Start.format(formatter) + " - " + slot2End.format(formatter));
-        timeSlots.add(slot3Start.format(formatter) + " - " + slot3End.format(formatter));
 
         return timeSlots;
     }
@@ -87,12 +95,11 @@ public class CreateItemFormController extends Controller implements Initializabl
     @FXML
     private void handleSubmitButtonAction() {
         try {
-            String name = nameField.getText();
             LocalDate date = datePicker.getValue();
             String timeSlot = timeSlotBox.getValue();
             float buyNowPrice = Float.parseFloat(buyNowPriceField.getText());
 
-            if (name.isEmpty() || date == null || timeSlot == null) {
+            if (date == null || timeSlot == null) {
                 JavaFxUtil.createAlert("Error Dialog", "Room Error", "Invalid input");
                 return;
             }
@@ -106,10 +113,10 @@ public class CreateItemFormController extends Controller implements Initializabl
             LocalDateTime startDateTime = LocalDateTime.of(date, startTime);
             LocalDateTime endDateTime = LocalDateTime.of(date, endTime);
 
-            Task<CreateItemResponse> task = new Task<>() {
+            Task<UpdateItemResponse> task = new Task<>() {
                 @Override
-                protected CreateItemResponse call() {
-                    return itemService.createItem(name,
+                protected UpdateItemResponse call() {
+                    return itemService.updateItem(item.getItemId(),
                             buyNowPrice,
                             startDateTime,
                             endDateTime);
@@ -117,47 +124,45 @@ public class CreateItemFormController extends Controller implements Initializabl
             };
 
             task.setOnRunning((e) -> {
-                createItemBtn.setDisable(true);
+                updateItemBtn.setDisable(true);
                 backButton.setDisable(true);
-                createItemBtn.setText("Creating...");
+                updateItemBtn.setText("Creating...");
             });
             task.setOnSucceeded((e) -> {
-                CreateItemResponse response = task.getValue();
+                UpdateItemResponse response = task.getValue();
                 if (response == null || response.getStatusCode() == 0) {
                     JavaFxUtil.createAlert("Error Dialog", "Item Error", "Failed to create item");
                 }
 
-                if (response.getStatusCode() == 2) {
-                    JavaFxUtil.createAlert("Error Dialog", "Item Error", "Item name already exists");
-                }
-
                 if (response.getStatusCode() == 1) {
                     JavaFxUtil.createAlert(AlertType.INFORMATION, "Information Dialog", "Item Information",
-                            "Item created successfully");
+                            "Item updated successfully");
                 }
 
-                createItemBtn.setDisable(false);
+                updateItemBtn.setDisable(false);
                 backButton.setDisable(false);
-                createItemBtn.setText("Create Item");
-                nameField.clear();
+                updateItemBtn.setText("Update Item");
                 buyNowPriceField.clear();
+                datePicker.setValue(null);
+                timeSlotBox.setValue(null);
 
             });
             task.setOnFailed((e) -> {
                 Throwable exception = task.getException();
                 exception.printStackTrace();
                 JavaFxUtil.createAlert("Error Dialog", "Item Error", "An error occurred during item creation");
-                createItemBtn.setDisable(false);
+                updateItemBtn.setDisable(false);
                 backButton.setDisable(false);
-                createItemBtn.setText("Create Item");
-                nameField.clear();
+                updateItemBtn.setText("Update Item");
                 buyNowPriceField.clear();
+                datePicker.setValue(null);
+                timeSlotBox.setValue(null);
             });
 
             new Thread(task).start();
 
         } catch (Exception e) {
-            JavaFxUtil.createAlert("Error Dialog", "Create Item Error", "Invalid input");
+            JavaFxUtil.createAlert("Error Dialog", "Update Item Error", "Invalid input");
         }
     }
 }

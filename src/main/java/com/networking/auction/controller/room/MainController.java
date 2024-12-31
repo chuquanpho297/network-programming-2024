@@ -1,7 +1,6 @@
 package com.networking.auction.controller.room;
 
 import java.net.URL;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -120,19 +119,26 @@ public class MainController extends Controller implements Initializable {
                     JavaFxUtil.createAlert("Error Dialog", "Logout Error", "Logout failed");
                 }
 
-                switch (Objects.requireNonNull(response).getStatusCode()) {
-                    case 0:
-                        JavaFxUtil.createAlert("Error Dialog", "Logout Error", "Server error");
-                        break;
-                    case 1:
-                        switchToScreen((Stage) ((Node) event.getSource()).getScene().getWindow(), "login");
-                        break;
-                    case 2:
-                        JavaFxUtil.createAlert("Error Dialog", "Logout Error", "User not logged in");
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Invalid status code");
-                }
+                switchToScreen((Stage) ((Node) event.getSource()).getScene().getWindow(), "login");
+                StateManager.getInstance().setUserId(Optional.empty());
+                StateManager.getInstance().setUsername(Optional.empty());
+                StateManager.getInstance().setRoomId(Optional.empty());
+                StateManager.getInstance().setMainFxmlPath(Optional.empty());
+
+                // switch (Objects.requireNonNull(response).getStatusCode()) {
+                // case 0:
+                // JavaFxUtil.createAlert("Error Dialog", "Logout Error", "Server error");
+                // break;
+                // case 1:
+                // switchToScreen((Stage) ((Node) event.getSource()).getScene().getWindow(),
+                // "login");
+                // break;
+                // case 2:
+                // JavaFxUtil.createAlert("Error Dialog", "Logout Error", "User not logged in");
+                // break;
+                // default:
+                // throw new IllegalArgumentException("Invalid status code");
+                // }
             } catch (Exception e) {
                 e.printStackTrace();
             }

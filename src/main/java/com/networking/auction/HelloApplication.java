@@ -1,31 +1,23 @@
 package com.networking.auction;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-import com.networking.auction.protocol.request.item.SearchItemRequest;
-import com.networking.auction.socket.TCPClient;
 import com.networking.auction.util.FxmlUtil;
-import com.networking.auction.util.JavaFxUtil;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 public class HelloApplication extends Application {
     public static void main(String[] args) {
-        Dotenv dotenv = Dotenv.load();
-        TCPClient client = new TCPClient(Integer.parseInt(dotenv.get("SERVER_PORT")), dotenv.get("SERVER_ADDRESS"));
-        StateManager.getInstance().setClientSocket(client);
-        try {
-            launch();
-        } finally {
-            client.closeSocketConnection();
-        }
+        launch();
     }
+
+    // TODO: Add room log (place item in room request)
+    // TODO: Add user log (in auction, place bid, buy now will be logged)
+    // TODO: Add place item to room (after join room)
+    // TODO: Add place bid (after join room)
+    // TODO: Add buy now (after join room)
+    // TODO: Add send notification to user
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -42,10 +34,5 @@ public class HelloApplication extends Application {
 
         // Show the stage
         stage.show();
-
-        if (StateManager.getInstance().getClientSocket().getSocket() == null) {
-            JavaFxUtil.createAlert(AlertType.WARNING, "Error Dialog", "Connection Error",
-                    "Failed to connect to server");
-        }
     }
 }

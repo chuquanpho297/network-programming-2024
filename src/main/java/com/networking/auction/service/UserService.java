@@ -1,12 +1,12 @@
 package com.networking.auction.service;
 
-import com.networking.auction.StateManager;
 import com.networking.auction.protocol.request.LoginRequest;
 import com.networking.auction.protocol.request.LogoutRequest;
 import com.networking.auction.protocol.request.RegisterRequest;
 import com.networking.auction.protocol.response.LoginResponse;
 import com.networking.auction.protocol.response.LogoutResponse;
 import com.networking.auction.protocol.response.RegisterResponse;
+import com.networking.auction.socket.TCPClient;
 
 public class UserService {
 
@@ -20,13 +20,13 @@ public class UserService {
     }
 
     public LoginResponse login(String username, String password) {
-        LoginRequest loginRequest = LoginRequest.builder()
-                .username(username)
-                .password(password)
-                .build();
-
         try {
-            String receiveMess = StateManager.getInstance().getClientSocket().sendAndReceive(loginRequest.toString());
+            LoginRequest loginRequest = LoginRequest.builder()
+                    .username(username)
+                    .password(password)
+                    .build();
+
+            String receiveMess = TCPClient.fetchServer(loginRequest.toString());
             LoginResponse loginResponse = LoginResponse.parseResponse(receiveMess);
 
             return loginResponse;
@@ -37,10 +37,10 @@ public class UserService {
     }
 
     public LogoutResponse logout() {
-        LogoutRequest logoutRequest = new LogoutRequest();
-
         try {
-            String receiveMess = StateManager.getInstance().getClientSocket().sendAndReceive(logoutRequest.toString());
+            LogoutRequest logoutRequest = new LogoutRequest();
+
+            String receiveMess = TCPClient.fetchServer(logoutRequest.toString());
             LogoutResponse response = LogoutResponse.parseResponse(receiveMess);
             return response;
         } catch (Exception e) {
@@ -50,13 +50,12 @@ public class UserService {
     }
 
     public RegisterResponse register(String username, String password) {
-        RegisterRequest registerRequest = RegisterRequest.builder()
-                .username(username)
-                .password(password)
-                .build();
         try {
-            String receiveMess = StateManager.getInstance().getClientSocket()
-                    .sendAndReceive(registerRequest.toString());
+            RegisterRequest registerRequest = RegisterRequest.builder()
+                    .username(username)
+                    .password(password)
+                    .build();
+            String receiveMess = TCPClient.fetchServer(registerRequest.toString());
             RegisterResponse registerResponse = RegisterResponse.parseResponse(receiveMess);
 
             return registerResponse;

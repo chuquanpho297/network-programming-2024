@@ -30,10 +30,33 @@ public class Controller {
         }
     }
 
+    public void switchToScreen(Stage stage, String fxmlDir, Controller controller) throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(HelloApplication.class.getResource(fxmlDir)));
+            loader.setController(controller);
+            Parent root = loader.load();
+            root.getStylesheets().add(HelloApplication.class.getResource(fxmlDir + "/styles.css").toExternalForm());
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void switchToScreenNotStyle(Stage stage, String fxmlPath) throws IOException {
         try {
             Parent root = FXMLLoader
                     .load(Objects.requireNonNull(HelloApplication.class.getResource(fxmlPath)));
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void switchToScreenNotStyle(Stage stage, String fxmlPath, Controller controller) throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(HelloApplication.class.getResource(fxmlPath)));
+            loader.setController(controller);
+            Parent root = loader.load();
             stage.setScene(new Scene(root));
         } catch (IOException e) {
             e.printStackTrace();

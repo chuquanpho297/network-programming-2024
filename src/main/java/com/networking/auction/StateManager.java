@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.networking.auction.socket.TCPClient;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,6 +32,12 @@ public class StateManager {
     @Getter
     private Optional<String> mainFxmlPath;
 
+    @Getter
+    private String serverHost;
+
+    @Getter
+    private int serverPort;
+
     public static StateManager getInstance() {
         if (instance == null) {
             instance = new StateManager();
@@ -43,5 +50,8 @@ public class StateManager {
         this.username = Optional.empty();
         this.roomId = Optional.empty();
         this.mainFxmlPath = Optional.empty();
+        Dotenv dotenv = Dotenv.load();
+        this.serverHost = dotenv.get("SERVER_HOST");
+        this.serverPort = Integer.parseInt(dotenv.get("SERVER_PORT"));
     }
 }

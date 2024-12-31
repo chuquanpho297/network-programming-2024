@@ -2,7 +2,6 @@ package com.networking.auction.controller.item;
 
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.networking.auction.models.Item;
@@ -14,7 +13,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import lombok.Getter;
 
+@Getter
 public class TableViewItemController implements Initializable {
 
     @FXML
@@ -52,6 +53,9 @@ public class TableViewItemController implements Initializable {
 
     @FXML
     private TableColumn<Item, String> roomNameColumn;
+
+    @FXML
+    private TableColumn<Item, Void> actionColumn;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

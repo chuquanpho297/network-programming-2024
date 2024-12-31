@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.logging.Logger;
 
+import com.networking.auction.StateManager;
 import com.networking.auction.util.ResponseUtil;
 
 import lombok.Getter;
@@ -32,7 +33,6 @@ public class TCPClient {
         this.serverPort = serverPort;
         this.serverAddress = serverAddress;
         this.createSocket();
-
     }
 
     private void createSocket() {
@@ -104,6 +104,30 @@ public class TCPClient {
             this.socket.close();
         } catch (IOException e) {
             LOGGER.warning("Failed to close socket");
+        }
+    }
+
+    public static String fetch(int serverPort, String serverAddress, String message) {
+        TCPClient client = new TCPClient(serverPort, serverAddress);
+        try {
+            return client.sendAndReceive(message);
+        } catch (IOException | InterruptedException e) {
+            LOGGER.warning("Failed to send and receive message: " + e.getMessage());
+            return null;
+        } finally {
+            client.closeSocketConnection();
+        }
+    }
+
+    public static String fetchServer(String message) {
+        TCPClient client = new TCPClient(StateManager.getInstance().getServerPort(),
+                StateManager.getInstance().getServerHost());
+
+        try {
+            return client.sendAndReceive(message);
+        } catch (IOException | InterruptedException e) {
+            LOGGER.warning("Failed to send and receive message: " + e.getMessage());
+            return null;
         }
     }
 }
