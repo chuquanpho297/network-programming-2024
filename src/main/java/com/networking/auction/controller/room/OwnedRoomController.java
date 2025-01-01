@@ -77,12 +77,20 @@ public class OwnedRoomController extends Controller implements Initializable {
                         joinButton.setOnAction((event) -> {
                             Room room = getTableView().getItems().get(getIndex());
                             try {
-                                switchToScreenNotStyle((Stage) joinButton.getScene().getWindow(),
-                                        "room/room_log.fxml",
-                                        new RoomLogController(room));
+                                RoomLogController roomLogController = new RoomLogController(OwnedRoomController.this.getStage(), "room/room_log.fxml",room, OwnedRoomController.this);
+                                roomLogController.setMainController(OwnedRoomController.this.mainController);
+                                roomLogController.show();
                             } catch (IOException e) {
+                                // TODO Auto-generated catch block
                                 e.printStackTrace();
                             }
+                            // try {
+                            //     // switchToScreenNotStyle((Stage) joinButton.getScene().getWindow(),
+                            //     //         "room/room_log.fxml",
+                            //     //         new RoomLogController(room));
+                            // } catch (IOException e) {
+                            //     e.printStackTrace();
+                            // }
                         });
                     }
 

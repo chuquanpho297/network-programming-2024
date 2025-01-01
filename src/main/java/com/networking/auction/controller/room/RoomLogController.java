@@ -40,8 +40,10 @@ public class RoomLogController extends Controller implements Initializable {
     @FXML
     private ProgressIndicator progressIndicator;
 
-    public RoomLogController(Room room) {
+    public RoomLogController(Stage stage, String fxmlPath, Room room, Controller prev) throws IOException {
+        super(stage, fxmlPath);
         this.room = room;
+        this.setPreviousController(prev);
     }
 
     @Override
@@ -56,10 +58,9 @@ public class RoomLogController extends Controller implements Initializable {
 
     @FXML
     private void handleBackButton(Event e) {
-        try {
-            switchToScreen((Stage) ((Node) e.getSource()).getScene().getWindow(), "room");
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
+        if (this.mainController != null) {
+            this.mainController.show();
+        } else
+            this.getPreviousController().show();
     }
 }
