@@ -1,7 +1,5 @@
 package com.networking.auction.protocol.request.item;
 
-import java.time.LocalDateTime;
-
 import com.networking.auction.StateManager;
 import com.networking.auction.models.Item.ItemStateEnum;
 import com.networking.auction.protocol.request.Request;
@@ -16,16 +14,12 @@ import lombok.Setter;
 public class CreateItemRequest extends Request {
     private String name;
     private float buyNowPrice;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
     private int ownerId;
 
     @Builder
-    public CreateItemRequest(String name, LocalDateTime startTime, LocalDateTime endTime, float currentPrice,
+    public CreateItemRequest(String name, float currentPrice,
             ItemStateEnum state, float buyNowPrice) {
         this.name = name;
-        this.startTime = startTime;
-        this.endTime = endTime;
         this.buyNowPrice = buyNowPrice;
         this.ownerId = StateManager.getInstance().getUserId().orElseThrow();
     }

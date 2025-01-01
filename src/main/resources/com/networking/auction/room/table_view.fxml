@@ -13,6 +13,8 @@
         <TableColumn fx:id="totalParticipantsColumn" prefWidth="150.0" text="Total Participants" />
         <TableColumn fx:id="ownerIdColumn" visible="false" text="Owner ID" />
         <TableColumn fx:id="roomIdColumn" visible="false" text="Room ID" />
+        <TableColumn fx:id="startTimeColumn" text="Start Time" />
+        <TableColumn fx:id="endTimeColumn" text="End Time" />
         <TableColumn fx:id="actionColumn" text="Actions" />
 
     </columns>

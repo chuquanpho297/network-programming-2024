@@ -92,13 +92,11 @@ public class ItemService {
     }
 
     public CreateItemResponse createItem(String name,
-            float buyNowPrice, LocalDateTime startTime, LocalDateTime endTime) {
+            float buyNowPrice) {
         try {
             CreateItemRequest request = CreateItemRequest.builder()
                     .name(name)
                     .buyNowPrice(buyNowPrice)
-                    .startTime(startTime)
-                    .endTime(endTime)
                     .build();
             String rawResponse = TCPClient.fetchServer(request.toString());
             CreateItemResponse response = CreateItemResponse.parseResponse(rawResponse);
@@ -109,14 +107,11 @@ public class ItemService {
         return null;
     }
 
-    public UpdateItemResponse updateItem(int itemId, float buyNowPrice, LocalDateTime startTime,
-            LocalDateTime endTime) {
+    public UpdateItemResponse updateItem(int itemId, float buyNowPrice) {
         try {
             UpdateItemRequest request = UpdateItemRequest.builder()
                     .itemId(itemId)
                     .buyNowPrice(buyNowPrice)
-                    .startTime(startTime)
-                    .endTime(endTime)
                     .build();
             String rawResponse = TCPClient.fetchServer(request.toString());
             UpdateItemResponse response = UpdateItemResponse.parseResponse(rawResponse);

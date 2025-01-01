@@ -2,8 +2,6 @@ package com.networking.auction.controller.item;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -88,31 +86,18 @@ public class CreateItemFormController extends Controller implements Initializabl
     private void handleSubmitButtonAction() {
         try {
             String name = nameField.getText();
-            LocalDate date = datePicker.getValue();
-            String timeSlot = timeSlotBox.getValue();
             float buyNowPrice = Float.parseFloat(buyNowPriceField.getText());
 
-            if (name.isEmpty() || date == null || timeSlot == null) {
+            if (name.isEmpty()) {
                 JavaFxUtil.createAlert("Error Dialog", "Room Error", "Invalid input");
                 return;
             }
-
-            // Parse the time slot to get start and end times
-            String[] times = timeSlot.split(" - ");
-            LocalTime startTime = LocalTime.parse(times[0]);
-            LocalTime endTime = LocalTime.parse(times[1]);
-
-            // Combine date and time to get LocalDateTime
-            LocalDateTime startDateTime = LocalDateTime.of(date, startTime);
-            LocalDateTime endDateTime = LocalDateTime.of(date, endTime);
 
             Task<CreateItemResponse> task = new Task<>() {
                 @Override
                 protected CreateItemResponse call() {
                     return itemService.createItem(name,
-                            buyNowPrice,
-                            startDateTime,
-                            endDateTime);
+                            buyNowPrice);
                 }
             };
 

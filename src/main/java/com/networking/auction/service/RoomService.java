@@ -51,20 +51,8 @@ public class RoomService {
         try {
             CreateRoomRequest request = CreateRoomRequest.builder()
                     .roomName(roomName)
-                    .build();
-            String receiveMess = TCPClient.fetchServer(request.toString());
-            CreateRoomResponse response = CreateRoomResponse.parseResponse(receiveMess);
-            return response;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public CreateRoomResponse createRoom(String roomName) {
-        try {
-            CreateRoomRequest request = CreateRoomRequest.builder()
-                    .roomName(roomName)
+                    .startTime(startTime)
+                    .endTime(endTime)
                     .build();
             String receiveMess = TCPClient.fetchServer(request.toString());
             CreateRoomResponse response = CreateRoomResponse.parseResponse(receiveMess);

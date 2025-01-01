@@ -19,8 +19,8 @@ import lombok.ToString;
 public class Item {
     private int itemId;
     private String name;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private Optional<LocalDateTime> startTime;
+    private Optional<LocalDateTime> endTime;
     private float currentPrice;
     private ItemStateEnum state;
     private float buyNowPrice;
@@ -57,8 +57,8 @@ public class Item {
         return Item.builder()
                 .itemId(Integer.parseInt(parts[0]))
                 .name(parts[1].replace("%20", " "))
-                .startTime(LocalDateTime.parse(parts[2]))
-                .endTime(LocalDateTime.parse(parts[3]))
+                .startTime(parts[2].equals("NULL") ? Optional.empty() : Optional.of(LocalDateTime.parse(parts[2])))
+                .endTime(parts[3].equals("NULL") ? Optional.empty() : Optional.of(LocalDateTime.parse(parts[3])))
                 .currentPrice(Float.parseFloat(parts[4]))
                 .state(ItemStateEnum.valueOf(parts[5].toUpperCase()))
                 .buyNowPrice(Float.parseFloat(parts[6]))

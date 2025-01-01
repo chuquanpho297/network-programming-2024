@@ -24,7 +24,9 @@ public class LoginResponse extends Response {
 
         if (parts.length == 3) {
             userId = Optional.of(Integer.parseInt(parts[2].split(" ")[0]));
-            roomId = Optional.of(Integer.parseInt(parts[2].split(" ")[1]));
+            String roomIdStr = parts[2].split(" ")[1];
+            roomId = roomIdStr.equals("NULL") ? Optional.empty()
+                    : Optional.of(Integer.parseInt(roomIdStr));
         }
         if (respondCode != ResponseEnum.LOGIN_RES.getResponse()) {
             throw new IllegalArgumentException("Invalid response code");
