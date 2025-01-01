@@ -25,11 +25,10 @@ public enum RequestEnum {
     CREATE_ITEM_REQ(16),
     PLACE_BID_REQ(17),
     BUY_NOW_REQ(18),
-    DELETE_ITEM_FROM_ROOM_REQ(19),
-    DELETE_ITEM_REQ(20),
-    UPDATE_ITEM_REQ(21),
-    VIEW_USER_LOG_REQ(22),
-    VIEW_OWNER_ITEMS_REQ(23);
+    DELETE_ITEM_REQ(19),
+    UPDATE_ITEM_REQ(20),
+    VIEW_USER_LOG_REQ(21),
+    VIEW_OWNED_ITEMS_REQ(22);
 
     private final int request;
 
