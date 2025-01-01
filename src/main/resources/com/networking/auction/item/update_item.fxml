@@ -32,15 +32,7 @@
         <Label text="Buy Now Price:" GridPane.rowIndex="1" />
         <TextField fx:id="buyNowPriceField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-        <Label text="Date:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-        <DatePicker fx:id="datePicker" prefWidth="200.0" GridPane.columnIndex="1"
-            GridPane.rowIndex="2" />
-
-        <Label text="Time slot:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-        <ComboBox fx:id="timeSlotBox" prefWidth="200.0" GridPane.columnIndex="1"
-            GridPane.rowIndex="3" />
-
         <Button fx:id="updateItemBtn" text="update Item" GridPane.columnIndex="1"
-            GridPane.rowIndex="4" />
+            GridPane.rowIndex="2" />
     </GridPane>
 </VBox>
