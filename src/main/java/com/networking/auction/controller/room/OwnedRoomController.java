@@ -17,7 +17,6 @@ import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
@@ -39,7 +38,8 @@ public class OwnedRoomController extends Controller implements Initializable {
 
     private final RoomService roomService = RoomService.getInstance();
 
-    public OwnedRoomController(ProgressIndicator progressIndicator) {
+    public OwnedRoomController(Stage stage, String fxmlPath, ProgressIndicator progressIndicator) throws IOException {
+        super(stage, fxmlPath);
         this.progressIndicator = progressIndicator;
     }
 
@@ -50,8 +50,10 @@ public class OwnedRoomController extends Controller implements Initializable {
         createRoomBtn.addEventHandler(MOUSE_CLICKED,
                 e -> {
                     try {
-                        switchToScreenNotStyle((Stage) ((Node) e.getSource()).getScene().getWindow(),
-                                "room/create_room.fxml");
+                        CreateRoomController createRoomController = new CreateRoomController(this.getStage(),
+                                "room/create_room.fxml", this);
+                        createRoomController.setMainController(this.mainController);
+                        createRoomController.show();
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }

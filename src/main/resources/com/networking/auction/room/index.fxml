@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="screen" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.networking.auction.controller.room.MainController">
+<VBox fx:id="screen" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <HBox fx:id="header" prefHeight="74.0" prefWidth="1200.0">
         <Label fx:id="homeLabel" alignment="CENTER" prefHeight="74.0" prefWidth="168" text="Home" />
         <Label fx:id="titleLabel" alignment="CENTER" prefHeight="74.0" prefWidth="209.0" text="Label">

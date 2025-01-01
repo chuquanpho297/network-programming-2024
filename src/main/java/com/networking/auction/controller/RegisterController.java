@@ -2,6 +2,7 @@ package com.networking.auction.controller;
 
 import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -36,6 +37,10 @@ public class RegisterController extends Controller implements Initializable {
 
     private UserService userService = UserService.getInstance();
 
+    public RegisterController(String fxmlPath) throws IOException {
+        super(fxmlPath, "register/styles.css");
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         registerButton.addEventHandler(MOUSE_CLICKED, event -> {
@@ -66,7 +71,8 @@ public class RegisterController extends Controller implements Initializable {
                             JavaFxUtil.createAlert(AlertType.INFORMATION, "Information Dialog", "Register Success",
                                     "Register successfully");
                             Thread.sleep(500);
-                            switchToScreen((Stage) ((Node) event.getSource()).getScene().getWindow(), "login");
+                            LoginController loginController = new LoginController("login/index.fxml");
+                            loginController.show();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -93,7 +99,8 @@ public class RegisterController extends Controller implements Initializable {
 
         login.addEventHandler(MOUSE_CLICKED, event -> {
             try {
-                switchToScreen((Stage) ((Node) event.getSource()).getScene().getWindow(), "login");
+                LoginController loginController = new LoginController("login/index.fxml");
+                loginController.show();
             } catch (Exception e) {
                 e.printStackTrace();
             }

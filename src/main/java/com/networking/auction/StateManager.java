@@ -5,37 +5,30 @@ import java.util.Optional;
 import com.networking.auction.socket.TCPClient;
 
 import io.github.cdimascio.dotenv.Dotenv;
-import lombok.Getter;
-import lombok.Setter;
+
 
 public class StateManager {
 
     private static StateManager instance;
 
-    @Getter
-    @Setter
     private TCPClient clientSocket;
 
-    @Setter
-    @Getter
+
     private Optional<Integer> userId;
 
-    @Setter
-    @Getter
+
     private Optional<String> username;
 
-    @Setter
-    @Getter
+
     private Optional<Integer> roomId;
 
-    @Setter
-    @Getter
+
     private Optional<String> mainFxmlPath;
 
-    @Getter
+
     private String serverHost;
 
-    @Getter
+
     private int serverPort;
 
     public static StateManager getInstance() {
@@ -54,4 +47,63 @@ public class StateManager {
         this.serverHost = dotenv.get("SERVER_HOST");
         this.serverPort = Integer.parseInt(dotenv.get("SERVER_PORT"));
     }
+
+    public Optional<Integer> getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Optional<Integer> userId) {
+        this.userId = userId;
+    }
+
+    public Optional<String> getUsername() {
+        return username;
+    }
+
+    public void setUsername(Optional<String> username) {
+        this.username = username;
+    }
+
+    public Optional<Integer> getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(Optional<Integer> roomId) {
+        this.roomId = roomId;
+    }
+
+    public Optional<String> getMainFxmlPath() {
+        return mainFxmlPath;
+    }
+
+    public void setMainFxmlPath(Optional<String> mainFxmlPath) {
+        this.mainFxmlPath = mainFxmlPath;
+    }
+
+    public String getServerHost() {
+        return serverHost;
+    }
+
+    public void setServerHost(String serverHost) {
+        this.serverHost = serverHost;
+    }
+
+    public int getServerPort() {
+        return serverPort;
+    }
+
+    public void setServerPort(int serverPort) {
+        this.serverPort = serverPort;
+    }
+
+    @SuppressWarnings("exports")
+    public TCPClient getClientSocket() {
+        return clientSocket;
+    }
+
+    @SuppressWarnings("exports")
+    public void setClientSocket(TCPClient clientSocket) {
+        this.clientSocket = clientSocket;
+    }
+
 }

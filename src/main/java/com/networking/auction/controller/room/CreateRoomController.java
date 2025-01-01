@@ -32,6 +32,11 @@ public class CreateRoomController extends Controller implements Initializable {
 
     private final RoomService roomService = RoomService.getInstance();
 
+    public CreateRoomController(Stage stage, String fxmlPath, Controller prev) throws IOException {
+        super(stage, fxmlPath);
+        this.setPreviousController(prev);
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -96,10 +101,10 @@ public class CreateRoomController extends Controller implements Initializable {
     }
 
     private void goBack(Event event) {
-        try {
-            switchToScreen((Stage) ((Node) event.getSource()).getScene().getWindow(), "room");
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (this.mainController == null) {
+            this.getPreviousController().show();
+        } else {
+            this.mainController.show();
         }
     }
 

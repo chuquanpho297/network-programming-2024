@@ -60,7 +60,9 @@ public class AllItemController extends Controller implements Initializable {
 
     private final ItemService itemService = ItemService.getInstance();
 
-    public AllItemController(ProgressIndicator progressIndicator) {
+    @SuppressWarnings("exports")
+    public AllItemController(ProgressIndicator progressIndicator, Stage stage, String fxmlPath) throws IOException {
+        super(stage, fxmlPath);
         this.progressIndicator = progressIndicator;
     }
 
@@ -117,12 +119,13 @@ public class AllItemController extends Controller implements Initializable {
                         joinButton.setOnAction((event) -> {
                             Item item = getTableView().getItems().get(getIndex());
                             try {
-                                switchToScreenNotStyle((Stage) joinButton.getScene().getWindow(),
-                                        "room/auction_room.fxml",
-                                        new AuctionRoomController(
-                                                Room.builder().roomId(item.getRoomId().get())
-                                                        .roomName(item.getRoomName().get())
-                                                        .build()));
+                                AuctionRoomController auctionRoomController = new AuctionRoomController(
+                                        AllItemController.this.getStage(), "room/auction_room.fxml",
+                                        Room.builder().roomId(item.getRoomId().get())
+                                                .roomName(item.getRoomName().get())
+                                                .build(),
+                                        progressIndicator, AllItemController.this);
+                                auctionRoomController.show();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }

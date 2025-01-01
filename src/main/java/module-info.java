@@ -1,6 +1,6 @@
 
 module com.networking.auction {
-    requires javafx.controls;
+    requires transitive javafx.controls;
     requires javafx.fxml;
     requires java.logging;
     requires static lombok;
@@ -8,6 +8,8 @@ module com.networking.auction {
     requires dotenv.java;
     requires javafx.base;
     requires java.sql;
+
+
 
     opens com.networking.auction to javafx.fxml;
     opens com.networking.auction.controller.item to javafx.fxml;

@@ -70,17 +70,20 @@ public class OwnedItemController extends Controller implements Initializable {
 
     private final ItemService itemService = ItemService.getInstance();
 
-    public OwnedItemController(ProgressIndicator progressIndicator) {
+    public OwnedItemController(ProgressIndicator progressIndicator, Stage stage, String fxmlPath) throws IOException {
+        super(stage, fxmlPath);
         this.progressIndicator = progressIndicator;
     }
 
-    @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         tableViewItemController = (TableViewItemController) itemTableView.getProperties().get("controller");
 
         createItemBtn.addEventHandler(MOUSE_CLICKED, e -> {
             try {
-                switchToScreenNotStyle((Stage) ((Node) e.getSource()).getScene().getWindow(), "item/create_item.fxml");
+                CreateItemFormController createItemController = new CreateItemFormController(this.getStage(),
+                        "item/create_item.fxml", this);
+                createItemController.setMainController(this.mainController);
+                createItemController.show();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
@@ -106,9 +109,12 @@ public class OwnedItemController extends Controller implements Initializable {
                         updateButton.setOnAction((event) -> {
                             try {
                                 Item item = getTableView().getItems().get(getIndex());
-                                switchToScreenNotStyle((Stage) ((Node) event.getSource()).getScene().getWindow(),
-                                        "item/update_item.fxml",
-                                        new UpdateItemFormController(item));
+                                UpdateItemFormController updateItemController = new UpdateItemFormController(item,
+                                        OwnedItemController.this.getStage(), "item/update_item.fxml",
+                                        OwnedItemController.this);
+                                updateItemController.setMainController(OwnedItemController.this.mainController);
+                            
+                                updateItemController.show();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }

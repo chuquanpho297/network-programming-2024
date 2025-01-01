@@ -1,5 +1,6 @@
 package com.networking.auction;
 
+import com.networking.auction.controller.LoginController;
 import com.networking.auction.util.FxmlUtil;
 
 import javafx.application.Application;
@@ -22,17 +23,22 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         // Load the FXML file for the login screen
-        FXMLLoader loader = new FXMLLoader(this.getClass().getResource(FxmlUtil.LOGIN.getFxmlPath()));
-        // Create the scene with the root node loaded from the FXML file
-        Scene scene = new Scene(loader.load());
-        String css = this.getClass().getResource(FxmlUtil.LOGIN.getCssPath()).toExternalForm();
-        scene.getStylesheets().add(css);
-        stage.setScene(scene);
+        // stage.setTitle("Auction System");
+        // FXMLLoader loader = new FXMLLoader(
+        // this.getClass().getResource("login/index.fxml"));
+        // // Create the scene with the root node loaded from the FXML file
+        // Scene scene = new Scene(loader.load());
+        // String css = this.getClass().getResource("login/style.css").toExternalForm();
+        // scene.getStylesheets().add(css);
+        // stage.setScene(scene);
 
-        // Set the title for the stage
+        // // Set the title for the stage
+
+        // // Show the stage
+        // stage.show();
+        LoginController loginController = new LoginController("login/index.fxml");
         stage.setTitle("Auction System");
-
-        // Show the stage
-        stage.show();
+        loginController.setStage(stage);
+        loginController.show();
     }
 }

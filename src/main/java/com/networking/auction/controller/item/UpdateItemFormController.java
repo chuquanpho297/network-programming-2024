@@ -50,13 +50,9 @@ public class UpdateItemFormController extends Controller implements Initializabl
     private final ItemService itemService = ItemService.getInstance();
     private Item item;
 
-    UpdateItemFormController(Item item) {
+    public UpdateItemFormController(Item item, Stage stage, String fxmlPath, Controller prev) throws IOException {
+        super(stage, fxmlPath);
         this.item = item;
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        // Initialize ComboBox with time options
         timeSlotBox.getItems().addAll(generateTimeSlots());
         nameField.setText(item.getName());
         buyNowPriceField.setText(String.valueOf(item.getBuyNowPrice()));
@@ -64,14 +60,19 @@ public class UpdateItemFormController extends Controller implements Initializabl
         datePicker.setValue(startDateTime.toLocalDate());
         timeSlotBox.setValue(startDateTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")) + " - " +
                 item.getEndTime().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+        this.setPreviousController(prev);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // Initialize ComboBox with time options
 
         backButton.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
                 event -> {
-                    try {
-                        switchToScreen((Stage) ((Node) event.getSource()).getScene().getWindow(), "room");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    if (this.mainController == null)
+                        this.getPreviousController().show();
+                    else
+                        this.mainController.show();
                 });
         updateItemBtn.setOnAction(event -> handleSubmitButtonAction());
     }
@@ -164,5 +165,9 @@ public class UpdateItemFormController extends Controller implements Initializabl
         } catch (Exception e) {
             JavaFxUtil.createAlert("Error Dialog", "Update Item Error", "Invalid input");
         }
+    }
+
+    void setItem(Item item) {
+        this.item = item;
     }
 }

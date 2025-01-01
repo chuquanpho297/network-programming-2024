@@ -16,9 +16,9 @@ import javafx.animation.Timeline;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
@@ -33,6 +33,9 @@ public class AuctionRoomController extends Controller implements Initializable {
     private Button backBtn;
 
     @FXML
+    private Button addItemBtn;
+
+    @FXML
     private Label titleLabel;
 
     @FXML
@@ -42,8 +45,12 @@ public class AuctionRoomController extends Controller implements Initializable {
     private LocalTime endTime;
     private Room room;
 
-    public AuctionRoomController(Room room) {
+    public AuctionRoomController(Stage stage, String fxmlPath, Room room, ProgressIndicator progressIndicator,
+            Controller prev) throws IOException {
+        super(stage, fxmlPath);
         this.room = room;
+        this.progressIndicator = progressIndicator;
+        this.setPreviousController(prev);
     }
 
     @Override
@@ -51,8 +58,8 @@ public class AuctionRoomController extends Controller implements Initializable {
         tableViewItemController = (TableViewItemController) itemTableView.getProperties().get("controller");
         // Initialize table columns if needed
         startCountdown(Duration.ofMinutes(5)); // Example: 5-minute countdown
-        titleLabel.setText(room.getRoomName());
         backBtn.setOnAction(this::handleBackButton);
+        addItemBtn.setOnAction(this::handleAddItemButton);
         tableViewItemController.getBuyNowPriceColumn().setVisible(false);
         tableViewItemController.getCurrentPriceColumn().setVisible(false);
         tableViewItemController.getStateColumn().setVisible(false);
@@ -60,8 +67,16 @@ public class AuctionRoomController extends Controller implements Initializable {
 
     @FXML
     private void handleBackButton(Event e) {
+        this.mainController.show();
+    }
+
+    @FXML
+    private void handleAddItemButton(Event e) {
         try {
-            switchToScreen((Stage) ((Node) e.getSource()).getScene().getWindow(), "room");
+            AddItemToRoomController addItemToRoomController = new AddItemToRoomController(
+                    this.getStage(), "room/add_item_to_room.fxml",
+                    progressIndicator, this);
+            addItemToRoomController.show();
         } catch (IOException e1) {
             e1.printStackTrace();
         }
@@ -88,5 +103,9 @@ public class AuctionRoomController extends Controller implements Initializable {
         long minutes = duration.toMinutes() % 60;
         long seconds = duration.getSeconds() % 60;
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
+    public void setTitle(String room) {
+        titleLabel.setText(room);
     }
 }

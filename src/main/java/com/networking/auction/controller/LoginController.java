@@ -2,11 +2,13 @@ package com.networking.auction.controller;
 
 import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.networking.auction.StateManager;
+import com.networking.auction.controller.room.RoomController;
 import com.networking.auction.protocol.response.LoginResponse;
 import com.networking.auction.service.UserService;
 import com.networking.auction.util.JavaFxUtil;
@@ -35,6 +37,10 @@ public class LoginController extends Controller implements Initializable {
 
     @FXML
     private Button loginButton;
+
+    public LoginController(String fxmlPath) throws IOException {
+        super(fxmlPath, "login/styles.css");
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -65,7 +71,9 @@ public class LoginController extends Controller implements Initializable {
                             StateManager.getInstance().setUserId(loginResponse.getUserId());
                             StateManager.getInstance().setRoomId(loginResponse.getRoomId());
                             StateManager.getInstance().setUsername(Optional.of(username.getText()));
-                            switchToScreen((Stage) ((Node) event.getSource()).getScene().getWindow(), "room");
+                            MainController mainController = new MainController("room/index.fxml");
+                            mainController.setMainController(mainController);
+                            mainController.show();
                             break;
                         case 2:
                             JavaFxUtil.createAlert("Error Dialog", "Login Error", "User already logged in");
@@ -93,7 +101,8 @@ public class LoginController extends Controller implements Initializable {
 
         register.addEventHandler(MOUSE_CLICKED, event -> {
             try {
-                switchToScreen((Stage) ((Node) event.getSource()).getScene().getWindow(), "register");
+                RegisterController registerController = new RegisterController("register/index.fxml");
+                registerController.show();
             } catch (Exception e) {
                 e.printStackTrace();
             }

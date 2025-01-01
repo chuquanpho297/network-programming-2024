@@ -48,6 +48,11 @@ public class CreateItemFormController extends Controller implements Initializabl
 
     private final ItemService itemService = ItemService.getInstance();
 
+    public CreateItemFormController(Stage stage, String fxmlPath, Controller prev) throws IOException {
+        super(stage, fxmlPath);
+        this.setPreviousController(prev);
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Initialize ComboBox with time options
@@ -55,10 +60,10 @@ public class CreateItemFormController extends Controller implements Initializabl
 
         backButton.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
                 event -> {
-                    try {
-                        switchToScreen((Stage) ((Node) event.getSource()).getScene().getWindow(), "room");
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (this.mainController == null) {
+                        this.getPreviousController().show();
+                    } else {
+                        this.mainController.show();
                     }
                 });
         createItemBtn.setOnAction(event -> handleSubmitButtonAction());

@@ -36,7 +36,8 @@ public class RoomController extends Controller implements Initializable {
 
     private final RoomService roomService = RoomService.getInstance();
 
-    public RoomController(ProgressIndicator progressIndicator) {
+    public RoomController(Stage stage, String fxmlPath, ProgressIndicator progressIndicator) throws IOException {
+        super(stage, fxmlPath, "room/styles.css");
         this.progressIndicator = progressIndicator;
     }
 
@@ -59,10 +60,12 @@ public class RoomController extends Controller implements Initializable {
                         joinButton.setOnAction((event) -> {
                             Room room = getTableView().getItems().get(getIndex());
                             try {
-                                switchToScreenNotStyle((Stage) joinButton.getScene().getWindow(),
-                                        "room/auction_room.fxml",
-                                        new AuctionRoomController(
-                                                room));
+                                AuctionRoomController auctionRoomController = new AuctionRoomController(
+                                        RoomController.this.getStage(), "room/auction_room.fxml", room,
+                                        progressIndicator, RoomController.this);
+                                auctionRoomController.setTitle(room.getRoomName());
+                                auctionRoomController.setMainController(RoomController.this.mainController);
+                                auctionRoomController.show();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }

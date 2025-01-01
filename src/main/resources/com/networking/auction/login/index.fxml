@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane fx:id="screen" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.networking.auction.controller.LoginController">
+<StackPane fx:id="screen" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <VBox fx:id="form" alignment="CENTER">
         <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" prefWidth="200.0" text="Auction System" />
         <TextField fx:id="username" prefHeight="26.0" prefWidth="200.0" promptText="Username" />

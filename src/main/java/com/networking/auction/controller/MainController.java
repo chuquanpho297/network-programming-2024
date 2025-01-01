@@ -1,14 +1,16 @@
-package com.networking.auction.controller.room;
+package com.networking.auction.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.networking.auction.HelloApplication;
 import com.networking.auction.StateManager;
-import com.networking.auction.controller.Controller;
 import com.networking.auction.controller.item.AllItemController;
 import com.networking.auction.controller.item.OwnedItemController;
+import com.networking.auction.controller.room.OwnedRoomController;
+import com.networking.auction.controller.room.RoomController;
 import com.networking.auction.protocol.response.LogoutResponse;
 import com.networking.auction.service.UserService;
 import com.networking.auction.util.JavaFxUtil;
@@ -64,16 +66,26 @@ public class MainController extends Controller implements Initializable {
     @FXML
     private Label username;
 
-    private final UserService userService = UserService.getInstance();
+    private UserService userService;
 
-    private final StateManager stateManager = StateManager.getInstance();
+    private StateManager stateManager;
+
+    public MainController(String fxmlPath) throws IOException {
+        super(fxmlPath);
+
+    }
 
     public void setMainBody(String fxmlPath) {
         progressIndicator.setVisible(false);
         String title = mapFxmlPathToTitle(fxmlPath);
-        Controller controller1 = getController(fxmlPath);
+        Controller controller1 = null;
+        try {
+            controller1 = getController(fxmlPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         setTitle(title, titleLabel);
-        stateManager.setMainFxmlPath(Optional.of(fxmlPath));
+        this.stateManager.setMainFxmlPath(Optional.of(fxmlPath));
 
         try {
             body.getChildren().clear();
@@ -90,7 +102,9 @@ public class MainController extends Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.username.setText("Hello, " + StateManager.getInstance().getUsername().orElse("User"));
-        this.setMainBody(stateManager.getMainFxmlPath().orElse("room/room.fxml"));
+        this.stateManager = StateManager.getInstance();
+        this.userService = UserService.getInstance();
+        this.setMainBody("room/room.fxml");
 
         setClickable(roomListLabel, event -> {
             this.setMainBody("room/room.fxml");
@@ -119,26 +133,11 @@ public class MainController extends Controller implements Initializable {
                     JavaFxUtil.createAlert("Error Dialog", "Logout Error", "Logout failed");
                 }
 
-                switchToScreen((Stage) ((Node) event.getSource()).getScene().getWindow(), "login");
                 StateManager.getInstance().setUserId(Optional.empty());
                 StateManager.getInstance().setUsername(Optional.empty());
                 StateManager.getInstance().setRoomId(Optional.empty());
                 StateManager.getInstance().setMainFxmlPath(Optional.empty());
 
-                // switch (Objects.requireNonNull(response).getStatusCode()) {
-                // case 0:
-                // JavaFxUtil.createAlert("Error Dialog", "Logout Error", "Server error");
-                // break;
-                // case 1:
-                // switchToScreen((Stage) ((Node) event.getSource()).getScene().getWindow(),
-                // "login");
-                // break;
-                // case 2:
-                // JavaFxUtil.createAlert("Error Dialog", "Logout Error", "User not logged in");
-                // break;
-                // default:
-                // throw new IllegalArgumentException("Invalid status code");
-                // }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -162,18 +161,29 @@ public class MainController extends Controller implements Initializable {
         }
     }
 
-    private Controller getController(String fxmlPath) {
+    private Controller getController(String fxmlPath) throws IOException {
         switch (fxmlPath) {
             case "room/room.fxml":
-                return new RoomController(progressIndicator);
+                RoomController controller = new RoomController(this.getStage(), fxmlPath, progressIndicator);
+                controller.setMainController(this);
+                return controller;
+
             case "room/owned_room.fxml":
-                return new OwnedRoomController(progressIndicator);
+                OwnedRoomController controller1 = new OwnedRoomController(this.getStage(), fxmlPath, progressIndicator);
+                controller1.setMainController(this);
+                return controller1;
             case "item/item.fxml":
-                return new AllItemController(progressIndicator);
+                AllItemController controller2 = new AllItemController(progressIndicator, this.getStage(), fxmlPath);
+                controller2.setMainController(this);
+                return controller2;
             case "item/owned_item.fxml":
-                return new OwnedItemController(progressIndicator);
+                OwnedItemController controller3 = new OwnedItemController(progressIndicator, this.getStage(), fxmlPath);
+                controller3.setMainController(this);
+                return controller3;
             default:
-                return new RoomController(progressIndicator);
+                RoomController controller4 = new RoomController(this.getStage(), fxmlPath, progressIndicator);
+                controller4.setMainController(this);
+                return controller4;
         }
     }
 }
