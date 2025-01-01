@@ -5,14 +5,17 @@ import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 import com.networking.auction.models.Item;
+import com.networking.auction.util.JavaFxUtil;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 import lombok.Getter;
 
 @Getter
@@ -75,6 +78,46 @@ public class TableViewItemController implements Initializable {
                 cellData -> new SimpleObjectProperty<>(cellData.getValue().getRoomId().orElse(null)));
         roomNameColumn.setCellValueFactory(
                 cellData -> new SimpleObjectProperty<>(cellData.getValue().getRoomName().orElse("")));
+
+        startTimeColumn.setCellValueFactory(
+                cellData -> new SimpleObjectProperty<>(cellData.getValue().getStartTime().orElse(null)));
+        endTimeColumn.setCellValueFactory(
+                cellData -> new SimpleObjectProperty<>(cellData.getValue().getEndTime().orElse(null)));
+
+        // Custom cell factory to format price columns
+        currentPriceColumn.setCellFactory(new Callback<>() {
+            @Override
+            public TableCell<Item, Float> call(TableColumn<Item, Float> param) {
+                return new TableCell<>() {
+                    @Override
+                    protected void updateItem(Float price, boolean empty) {
+                        super.updateItem(price, empty);
+                        if (empty || price == null) {
+                            setText(null);
+                        } else {
+                            setText(JavaFxUtil.formatPrice(price));
+                        }
+                    }
+                };
+            }
+        });
+
+        buyNowPriceColumn.setCellFactory(new Callback<>() {
+            @Override
+            public TableCell<Item, Float> call(TableColumn<Item, Float> param) {
+                return new TableCell<>() {
+                    @Override
+                    protected void updateItem(Float price, boolean empty) {
+                        super.updateItem(price, empty);
+                        if (empty || price == null) {
+                            setText(null);
+                        } else {
+                            setText(JavaFxUtil.formatPrice(price));
+                        }
+                    }
+                };
+            }
+        });
 
         itemTableView.getProperties().put("controller", this);
     }

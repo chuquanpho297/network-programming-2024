@@ -1,6 +1,7 @@
 package com.networking.auction.controller.room;
 
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 import com.networking.auction.models.Room;
@@ -36,6 +37,12 @@ public class TableViewRoomController implements Initializable {
     private TableColumn<Room, String> ownerNameColumn;
 
     @FXML
+    private TableColumn<Room, LocalDateTime> startTimeColumn;
+
+    @FXML
+    private TableColumn<Room, LocalDateTime> endTimeColumn;
+
+    @FXML
     private TableColumn<Room, Void> actionColumn;
 
     @Override
@@ -44,6 +51,8 @@ public class TableViewRoomController implements Initializable {
         ownerNameColumn.setCellValueFactory(new PropertyValueFactory<>("ownerName"));
         totalItemsColumn.setCellValueFactory(new PropertyValueFactory<>("totalItems"));
         totalParticipantsColumn.setCellValueFactory(new PropertyValueFactory<>("totalParticipants"));
+        startTimeColumn.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+        endTimeColumn.setCellValueFactory(new PropertyValueFactory<>("endTime"));
         roomTableView.getProperties().put("controller", this);
     }
 

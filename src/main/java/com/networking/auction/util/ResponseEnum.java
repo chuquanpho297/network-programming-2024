@@ -25,11 +25,10 @@ public enum ResponseEnum {
     CREATE_ITEM_RES(16),
     PLACE_BID_RES(17),
     BUY_NOW_RES(18),
-    DELETE_ITEM_FROM_ROOM_RES(19),
-    DELETE_ITEM_RES(20),
-    UPDATE_ITEM_RES(21),
-    VIEW_USER_LOG_RES(22),
-    VIEW_OWNER_ITEMS_RES(23);
+    DELETE_ITEM_RES(19),
+    UPDATE_ITEM_RES(20),
+    VIEW_USER_LOG_RES(21),
+    VIEW_OWNER_ITEMS_RES(22);
 
     private final int response;
 }

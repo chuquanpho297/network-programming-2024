@@ -18,7 +18,7 @@ public class GetAllOwnedItemRequest extends Request {
 
     @Override
     public int getRequestType() {
-        return RequestEnum.VIEW_OWNER_ITEMS_REQ.getRequest();
+        return RequestEnum.VIEW_OWNED_ITEMS_REQ.getRequest();
     }
 
 }

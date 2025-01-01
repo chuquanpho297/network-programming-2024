@@ -20,8 +20,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 public class OwnedRoomController extends Controller implements Initializable {
     @FXML
@@ -58,6 +62,47 @@ public class OwnedRoomController extends Controller implements Initializable {
                         e1.printStackTrace();
                     }
                 });
+        addButtonToTable();
+    }
+
+    private void addButtonToTable() {
+        Callback<TableColumn<Room, Void>, TableCell<Room, Void>> cellFactory = new Callback<>() {
+            @Override
+            public TableCell<Room, Void> call(final TableColumn<Room, Void> param) {
+                final TableCell<Room, Void> cell = new TableCell<>() {
+
+                    private final Button joinButton = new Button("Room Request");
+
+                    {
+                        joinButton.setOnAction((event) -> {
+                            Room room = getTableView().getItems().get(getIndex());
+                            try {
+                                switchToScreenNotStyle((Stage) joinButton.getScene().getWindow(),
+                                        "room/room_log.fxml",
+                                        new RoomLogController(room));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    }
+
+                    private final HBox pane = new HBox(joinButton);
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(pane);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };
+
+        tableViewRoomController.getActionColumn().setCellFactory(cellFactory);
     }
 
     public void getObservableOwnedRoomList() {
