@@ -21,8 +21,8 @@ public class RoomLog {
     private String itemName;
     private int roomId;
     private RoomLogStateEnum state;
-    private LocalDateTime timestamp;
     private float buyNowPrice;
+    private LocalDateTime timestamp;
 
     public enum RoomLogStateEnum {
         PENDING("pending"),
@@ -54,8 +54,8 @@ public class RoomLog {
                 .itemName(parts[2].replace("%20", " "))
                 .roomId(Integer.parseInt(parts[3]))
                 .state(RoomLogStateEnum.valueOf(parts[4].toUpperCase()))
-                .timestamp(LocalDateTime.parse(parts[5]))
-                .buyNowPrice(Float.parseFloat(parts[6]))
+                .timestamp(LocalDateTime.parse(parts[6]))
+                .buyNowPrice(Float.parseFloat(parts[5]))
                 .build();
     }
 }

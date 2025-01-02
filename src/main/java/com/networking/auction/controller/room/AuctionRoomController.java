@@ -4,15 +4,21 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import com.networking.auction.controller.Controller;
 import com.networking.auction.controller.item.TableViewItemController;
 import com.networking.auction.models.Item;
 import com.networking.auction.models.Room;
+import com.networking.auction.protocol.response.item.GetAllItemInRoomResponse;
+import com.networking.auction.service.RoomService;
+import com.networking.auction.util.JavaFxUtil;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -44,6 +50,7 @@ public class AuctionRoomController extends Controller implements Initializable {
     private Timeline timeline;
     private LocalTime endTime;
     private Room room;
+    private final RoomService roomService = RoomService.getInstance();
 
     public AuctionRoomController(Stage stage, String fxmlPath, Room room, ProgressIndicator progressIndicator,
             Controller prev) throws IOException {
@@ -51,6 +58,8 @@ public class AuctionRoomController extends Controller implements Initializable {
         this.room = room;
         this.progressIndicator = progressIndicator;
         this.setPreviousController(prev);
+        titleLabel.setText(room.getRoomName());
+        getObservableItemListInRoom();
     }
 
     @Override
@@ -75,7 +84,7 @@ public class AuctionRoomController extends Controller implements Initializable {
         try {
             AddItemToRoomController addItemToRoomController = new AddItemToRoomController(
                     this.getStage(), "room/add_item_to_room.fxml",
-                    progressIndicator, this);
+                    progressIndicator, this, room.getRoomId());
             addItemToRoomController.show();
         } catch (IOException e1) {
             e1.printStackTrace();
@@ -105,7 +114,30 @@ public class AuctionRoomController extends Controller implements Initializable {
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
-    public void setTitle(String room) {
-        titleLabel.setText(room);
+    public void getObservableItemListInRoom() {
+        Task<GetAllItemInRoomResponse> loadDataTask = new Task<>() {
+            @Override
+            protected GetAllItemInRoomResponse call() {
+                return roomService.getAllItemInRoomResponse(room.getRoomId());
+            }
+        };
+        loadDataTask.setOnRunning((e) -> {
+            GetAllItemInRoomResponse response = loadDataTask.getValue();
+            ArrayList<Item> itemList;
+            if (response.getStatusCode() == 0) {
+                JavaFxUtil.createAlert("Error Dialog", "Item Error", "Failed to get item list");
+                itemList = new ArrayList<>();
+            }
+            itemList = (ArrayList<Item>) response.getLists();
+            progressIndicator.setVisible(true);
+            this.tableViewItemController.addTableViewData(FXCollections.observableArrayList(itemList));
+
+        });
+        loadDataTask.setOnSucceeded((e) -> {
+            progressIndicator.setVisible(false);
+        });
+        loadDataTask.setOnFailed((e) -> progressIndicator.setVisible(false));
+        new Thread(loadDataTask).start();
     }
+
 }

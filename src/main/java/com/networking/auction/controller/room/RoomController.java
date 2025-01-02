@@ -63,7 +63,6 @@ public class RoomController extends Controller implements Initializable {
                                 AuctionRoomController auctionRoomController = new AuctionRoomController(
                                         RoomController.this.getStage(), "room/auction_room.fxml", room,
                                         progressIndicator, RoomController.this);
-                                auctionRoomController.setTitle(room.getRoomName());
                                 auctionRoomController.setMainController(RoomController.this.mainController);
                                 auctionRoomController.show();
                             } catch (IOException e) {

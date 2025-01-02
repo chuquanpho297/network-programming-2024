@@ -13,14 +13,16 @@ import com.networking.auction.controller.item.TableViewItemController;
 import com.networking.auction.models.Item;
 import com.networking.auction.models.Item.ItemStateEnum;
 import com.networking.auction.protocol.response.item.GetAllOwnedItemResponse;
+import com.networking.auction.protocol.response.room.PlaceItemInRoomResponse;
 import com.networking.auction.service.ItemService;
+import com.networking.auction.service.RoomService;
 import com.networking.auction.util.JavaFxUtil;
 
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
@@ -49,11 +51,17 @@ public class AddItemToRoomController extends Controller implements Initializable
     private Button backBtn;
 
     private final ItemService itemService = ItemService.getInstance();
+    private final RoomService roomService = RoomService.getInstance();
+    private final int roomId;
 
-    public AddItemToRoomController(Stage stage, String fxmlPath, ProgressIndicator progressIndicator, Controller prev)
+    public AddItemToRoomController(Stage stage, String fxmlPath, ProgressIndicator progressIndicator, Controller prev,
+            int roomId)
             throws IOException {
         super(stage, fxmlPath);
         this.progressIndicator = progressIndicator;
+        this.roomId = roomId;
+        getObservableOwnedItemList();
+        addCheckBoxToTable();
         this.setPreviousController(prev);
     }
 
@@ -71,8 +79,6 @@ public class AddItemToRoomController extends Controller implements Initializable
         });
 
         this.backBtn.setOnAction(event -> backButtonHandler());
-        getObservableOwnedItemList();
-        addCheckBoxToTable();
 
     }
 
@@ -116,22 +122,19 @@ public class AddItemToRoomController extends Controller implements Initializable
             public TableCell<Item, Void> call(final TableColumn<Item, Void> param) {
                 final TableCell<Item, Void> cell = new TableCell<>() {
 
-                    private final CheckBox checkButton = new CheckBox();
+                    private final Button addButton = new Button("Add");
 
                     {
-                        checkButton.setOnAction((e) -> {
+                        addButton.setOnAction((e) -> {
                             Item item = getTableView().getItems().get(getIndex());
-                            if (checkButton.isSelected()) {
-                                // Add item to room
-                                
-                            } else {
-                                // Remove item from room
-                                
-                            }
+                            placeItemInRoom(item);
+                            // Add item to room
                         });
 
                     }
-                    private final HBox pane = new HBox(checkButton);
+
+                    private final HBox pane = new HBox(addButton);
+
                     @Override
                     public void updateItem(Void item, boolean empty) {
                         super.updateItem(item, empty);
@@ -143,12 +146,43 @@ public class AddItemToRoomController extends Controller implements Initializable
                     }
                 };
 
-
                 return cell;
             }
         };
         // Add the column to the table (assuming you have a column to add this to)
         tableViewItemController.getActionColumn().setCellFactory(cellFactory);
+    }
+
+    public void placeItemInRoom(Item item) {
+        Task<PlaceItemInRoomResponse> task = new Task<>() {
+            @Override
+            protected PlaceItemInRoomResponse call() {
+                return roomService.placeItemInRoom(roomId, item.getItemId());
+            }
+        };
+
+        task.setOnRunning((e) -> {
+            progressIndicator.setVisible(true);
+        });
+
+        task.setOnSucceeded((e) -> {
+            PlaceItemInRoomResponse response = task.getValue();
+            if (response == null || response.getStatusCode() == 0) {
+                JavaFxUtil.createAlert("Error Dialog", "Item Error", "Failed to add item to room");
+            } else {
+                JavaFxUtil.createAlert(AlertType.INFORMATION, "Information Dialog",
+                        "Item Information", "Item added to room successfully");
+                tableViewItemController.removeTableViewData(item);
+            }
+            progressIndicator.setVisible(false);
+        });
+
+        task.setOnFailed((e) -> {
+            progressIndicator.setVisible(false);
+            JavaFxUtil.createAlert("Error Dialog", "Item Error", "An error occurred during adding item to room");
+        });
+
+        new Thread(task).start();
     }
 
 }

@@ -3,14 +3,22 @@ package com.networking.auction.service;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import com.networking.auction.protocol.request.item.GetAllItemInRoomRequest;
+import com.networking.auction.protocol.request.room.AcceptRejectItemRequest;
 import com.networking.auction.protocol.request.room.CreateRoomRequest;
 import com.networking.auction.protocol.request.room.GetAllOwnedRoomRequest;
 import com.networking.auction.protocol.request.room.GetAllRoomRequest;
+import com.networking.auction.protocol.request.room.GetRoomLogRequest;
 import com.networking.auction.protocol.request.room.JoinRoomRequest;
+import com.networking.auction.protocol.request.room.PlaceItemInRoomRequest;
+import com.networking.auction.protocol.response.item.GetAllItemInRoomResponse;
+import com.networking.auction.protocol.response.room.AcceptRejectItemResponse;
 import com.networking.auction.protocol.response.room.CreateRoomResponse;
 import com.networking.auction.protocol.response.room.GetAllOwnedRoomResponse;
 import com.networking.auction.protocol.response.room.GetAllRoomResponse;
+import com.networking.auction.protocol.response.room.GetRoomLogResponse;
 import com.networking.auction.protocol.response.room.JoinRoomResponse;
+import com.networking.auction.protocol.response.room.PlaceItemInRoomResponse;
 import com.networking.auction.socket.TCPClient;
 
 public class RoomService {
@@ -76,4 +84,64 @@ public class RoomService {
         }
         return null;
     }
+
+    public GetAllItemInRoomResponse getAllItemInRoomResponse(int roomId) {
+        try {
+            GetAllItemInRoomRequest request = GetAllItemInRoomRequest.builder()
+                    .roomId(roomId)
+                    .build();
+            String rawResponse = TCPClient.fetchServer(request.toString());
+            GetAllItemInRoomResponse response = GetAllItemInRoomResponse.parseResponse(rawResponse);
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public PlaceItemInRoomResponse placeItemInRoom(int roomId, int itemId) {
+        try {
+            PlaceItemInRoomRequest request = PlaceItemInRoomRequest.builder()
+                    .roomId(roomId)
+                    .itemId(itemId)
+                    .build();
+            String receiveMess = TCPClient.fetchServer(request.toString());
+            PlaceItemInRoomResponse response = PlaceItemInRoomResponse.parseResponse(receiveMess);
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public AcceptRejectItemResponse acceptRejectItem(int roomId, int itemId, boolean isAccept) {
+        try {
+            AcceptRejectItemRequest request = AcceptRejectItemRequest.builder()
+                    .roomId(roomId)
+                    .itemId(itemId)
+                    .confirmCode(isAccept ? 1 : 0)
+                    .build();
+            String receiveMess = TCPClient.fetchServer(request.toString());
+            AcceptRejectItemResponse response = AcceptRejectItemResponse.parseResponse(receiveMess);
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public GetRoomLogResponse getRoomLog(int roomId) {
+        try {
+            GetRoomLogRequest request = GetRoomLogRequest.builder()
+                    .roomId(roomId)
+                    .build();
+            String rawResponse = TCPClient.fetchServer(request.toString());
+            GetRoomLogResponse response = GetRoomLogResponse.parseResponse(rawResponse);
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

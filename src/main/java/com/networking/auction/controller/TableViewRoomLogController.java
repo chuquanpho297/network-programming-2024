@@ -12,7 +12,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import lombok.Getter;
 
+@Getter
 public class TableViewRoomLogController implements Initializable {
     @FXML
     private TableView<RoomLog> roomLogTableView;
@@ -27,22 +29,22 @@ public class TableViewRoomLogController implements Initializable {
     private TableColumn<RoomLog, Integer> roomIdColumn;
 
     @FXML
-    private TableColumn<RoomLog, String> actionColumn;
-
-    @FXML
     private TableColumn<RoomLog, String> timestampColumn;
 
     @FXML
     private TableColumn<RoomLog, RoomLogStateEnum> stateColumn;
 
+    @FXML
+    private TableColumn<RoomLog, Void> actionColumn;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         logIdColumn.setCellValueFactory(new PropertyValueFactory<>("logId"));
         roomIdColumn.setCellValueFactory(new PropertyValueFactory<>("roomId"));
-        actionColumn.setCellValueFactory(new PropertyValueFactory<>("action"));
         timestampColumn.setCellValueFactory(new PropertyValueFactory<>("timestamp"));
         stateColumn.setCellValueFactory(new PropertyValueFactory<>("state"));
         itemIdColumn.setCellValueFactory(new PropertyValueFactory<>("itemId"));
+        roomLogTableView.getProperties().put("controller", this);
     }
 
     public void setRoomLogData(ObservableList<RoomLog> roomLogData) {
@@ -51,5 +53,9 @@ public class TableViewRoomLogController implements Initializable {
 
     public void clearTableViewData() {
         roomLogTableView.getItems().clear();
+    }
+
+    public void removeTableViewData(RoomLog roomLog) {
+        roomLogTableView.getItems().remove(roomLog);
     }
 }

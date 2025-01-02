@@ -129,4 +129,8 @@ public class TableViewItemController implements Initializable {
     public void clearTableViewData() {
         itemTableView.getItems().clear();
     }
+
+    public void removeTableViewData(Item item) {
+        itemTableView.getItems().remove(item);
+    }
 }
