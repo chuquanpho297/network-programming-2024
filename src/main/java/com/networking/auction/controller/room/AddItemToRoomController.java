@@ -1,14 +1,11 @@
 package com.networking.auction.controller.room;
 
-import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import com.networking.auction.controller.Controller;
-import com.networking.auction.controller.item.CreateItemFormController;
 import com.networking.auction.controller.item.TableViewItemController;
 import com.networking.auction.models.Item;
 import com.networking.auction.models.Item.ItemStateEnum;
@@ -45,9 +42,6 @@ public class AddItemToRoomController extends Controller implements Initializable
     private TableViewItemController tableViewItemController;
 
     @FXML
-    private Button createItemBtn;
-
-    @FXML
     private Button backBtn;
 
     private final ItemService itemService = ItemService.getInstance();
@@ -68,15 +62,6 @@ public class AddItemToRoomController extends Controller implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.tableViewItemController = (TableViewItemController) itemTableView.getProperties().get("controller");
-        this.createItemBtn.addEventHandler(MOUSE_CLICKED, e -> {
-            try {
-                CreateItemFormController createItemController = new CreateItemFormController(this.getStage(),
-                        "item/create_item.fxml", this);
-                createItemController.show();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        });
 
         this.backBtn.setOnAction(event -> backButtonHandler());
 
@@ -86,7 +71,7 @@ public class AddItemToRoomController extends Controller implements Initializable
         Task<GetAllOwnedItemResponse> loadDataTask = new Task<>() {
             @Override
             protected GetAllOwnedItemResponse call() {
-                return itemService.getAllOwnedItems();
+                return itemService.getAllOwnedItems(1);
             }
         };
 

@@ -1,11 +1,8 @@
 package com.networking.auction;
 
 import com.networking.auction.controller.LoginController;
-import com.networking.auction.util.FxmlUtil;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class HelloApplication extends Application {

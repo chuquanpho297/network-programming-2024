@@ -11,11 +11,13 @@ import java.util.ResourceBundle;
 import com.networking.auction.controller.Controller;
 import com.networking.auction.controller.room.AuctionRoomController;
 import com.networking.auction.models.Item;
-import com.networking.auction.models.Room;
 import com.networking.auction.models.Item.ItemStateEnum;
+import com.networking.auction.models.Room;
 import com.networking.auction.protocol.response.item.GetAllItemResponse;
 import com.networking.auction.protocol.response.item.SearchItemResponse;
+import com.networking.auction.protocol.response.room.JoinRoomResponse;
 import com.networking.auction.service.ItemService;
+import com.networking.auction.service.RoomService;
 import com.networking.auction.util.JavaFxUtil;
 
 import javafx.collections.FXCollections;
@@ -59,8 +61,8 @@ public class AllItemController extends Controller implements Initializable {
     private TableViewItemController tableViewItemController;
 
     private final ItemService itemService = ItemService.getInstance();
+    private final RoomService roomService = RoomService.getInstance();
 
-    @SuppressWarnings("exports")
     public AllItemController(ProgressIndicator progressIndicator, Stage stage, String fxmlPath) throws IOException {
         super(stage, fxmlPath);
         this.progressIndicator = progressIndicator;
@@ -114,21 +116,53 @@ public class AllItemController extends Controller implements Initializable {
                 final TableCell<Item, Void> cell = new TableCell<>() {
 
                     private final Button joinButton = new Button("Join Room");
-
                     {
                         joinButton.setOnAction((event) -> {
                             Item item = getTableView().getItems().get(getIndex());
-                            try {
-                                AuctionRoomController auctionRoomController = new AuctionRoomController(
-                                        AllItemController.this.getStage(), "room/auction_room.fxml",
-                                        Room.builder().roomId(item.getRoomId().get())
-                                                .roomName(item.getRoomName().get())
-                                                .build(),
-                                        progressIndicator, AllItemController.this);
-                                auctionRoomController.show();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            Task<JoinRoomResponse> task = new Task<>() {
+
+                                @Override
+                                protected JoinRoomResponse call() {
+                                    return roomService.joinRoom(item.getRoomId().get());
+                                }
+                            };
+                            task.setOnRunning((e) -> {
+                                joinButton.setDisable(true);
+                                joinButton.setText("Joining...");
+                                progressIndicator.setVisible(true);
+                            });
+
+                            task.setOnSucceeded((e) -> {
+                                JoinRoomResponse response = task.getValue();
+                                try {
+                                    if (response == null || response.getStatusCode() == 0) {
+                                        JavaFxUtil.createAlert("Error Dialog", "Join Room Error",
+                                                "Failed to join room");
+                                        return;
+                                    }
+                                    joinButton.setDisable(false);
+                                    joinButton.setText("Join Room");
+                                    progressIndicator.setVisible(false);
+                                    AuctionRoomController auctionRoomController = new AuctionRoomController(
+                                            AllItemController.this.getStage(), "room/auction_room.fxml",
+                                            Room.builder().roomId(item.getRoomId().get())
+                                                    .roomName(item.getRoomName().get())
+                                                    .build(),
+                                            progressIndicator, AllItemController.this);
+                                    auctionRoomController.setMainController(AllItemController.this.mainController);
+                                    auctionRoomController.show();
+
+                                } catch (IOException ex) {
+                                    ex.printStackTrace();
+                                }
+                            });
+
+                            task.setOnFailed((e) -> {
+                                joinButton.setDisable(false);
+                                joinButton.setText("Join Room");
+                                progressIndicator.setVisible(false);
+                            });
+                            new Thread(task).start();
                         });
                     }
 

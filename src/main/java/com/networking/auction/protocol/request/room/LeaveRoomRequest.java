@@ -1,4 +1,4 @@
-package com.networking.auction.protocol.request.item;
+package com.networking.auction.protocol.request.room;
 
 import com.networking.auction.StateManager;
 import com.networking.auction.protocol.request.Request;
@@ -6,21 +6,23 @@ import com.networking.auction.util.RequestEnum;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
+@Setter
 @Getter
-public class GetAllOwnedItemRequest extends Request {
+public class LeaveRoomRequest extends Request {
     private int userId;
-    private int checkIsPlaced;
+    private int roomId;
 
     @Builder
-    public GetAllOwnedItemRequest(int checkIsPlaced) {
+    public LeaveRoomRequest(int roomId) {
+        this.roomId = roomId;
         this.userId = StateManager.getInstance().getUserId().orElseThrow();
-        this.checkIsPlaced = checkIsPlaced;
     }
 
     @Override
     public int getRequestType() {
-        return RequestEnum.VIEW_OWNED_ITEMS_REQ.getRequest();
+        return RequestEnum.LEAVE_ROOM_REQ.getRequest();
     }
 
 }

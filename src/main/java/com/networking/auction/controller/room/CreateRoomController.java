@@ -19,7 +19,6 @@ import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -66,11 +65,11 @@ public class CreateRoomController extends Controller implements Initializable {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
         LocalTime slot1Start = now.plusMinutes(5);
-        LocalTime slot1End = slot1Start.plusMinutes(5);
+        LocalTime slot1End = slot1Start.plusMinutes(60);
         LocalTime slot2Start = slot1End.plusMinutes(5);
-        LocalTime slot2End = slot2Start.plusMinutes(5);
+        LocalTime slot2End = slot2Start.plusMinutes(60);
         LocalTime slot3Start = slot2End.plusMinutes(5);
-        LocalTime slot3End = slot3Start.plusMinutes(5);
+        LocalTime slot3End = slot3Start.plusMinutes(60);
 
         timeSlots.add(slot1Start.format(formatter) + " - " + slot1End.format(formatter));
         timeSlots.add(slot2Start.format(formatter) + " - " + slot2End.format(formatter));

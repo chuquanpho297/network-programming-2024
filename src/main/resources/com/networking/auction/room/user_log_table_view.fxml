@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+
+<TableView fx:id="userLogTableView" layoutY="9.0" maxHeight="600.0" minHeight="600.0"
+    prefHeight="600.0" prefWidth="1032.0" xmlns="http://javafx.com/javafx/23.0.1"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.networking.auction.controller.room.TableViewRoomLogController">
+    <columns>
+        <TableColumn fx:id="logIdColumn" text="Log ID" />
+        <TableColumn fx:id="userIdColumn" text="User ID" visible="false" />
+        <TableColumn fx:id="itemIdColumn" text="Item ID" visible="false" />
+        <TableColumn fx:id="roomIdColumn" text="Room ID" visible="false" />
+        <TableColumn fx:id="userNameColumn" text="User Name" />
+        <TableColumn fx:id="bidPriceColumn" text="Bid Price" />
+        <TableColumn fx:id="timeColumn" text="Time" />
+        <TableColumn fx:id="statusColumn" text="Status" />
+    </columns>
+    <columnResizePolicy>
+        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+    </columnResizePolicy>
+</TableView>

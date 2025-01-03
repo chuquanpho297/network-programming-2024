@@ -74,6 +74,9 @@ public class LoginController extends Controller implements Initializable {
                             MainController mainController = new MainController("room/index.fxml");
                             mainController.setMainController(mainController);
                             mainController.show();
+                            // Close login window
+                            Stage stage = (Stage) loginButton.getScene().getWindow();
+                            stage.close();
                             break;
                         case 2:
                             JavaFxUtil.createAlert("Error Dialog", "Login Error", "User already logged in");
@@ -103,6 +106,7 @@ public class LoginController extends Controller implements Initializable {
             try {
                 RegisterController registerController = new RegisterController("register/index.fxml");
                 registerController.show();
+                this.getStage().close();
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -1,4 +1,4 @@
-package com.networking.auction.controller;
+package com.networking.auction.controller.room;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -29,10 +29,16 @@ public class TableViewRoomLogController implements Initializable {
     private TableColumn<RoomLog, Integer> roomIdColumn;
 
     @FXML
+    private TableColumn<RoomLog, String> itemNameColumn;
+
+    @FXML
     private TableColumn<RoomLog, String> timestampColumn;
 
     @FXML
     private TableColumn<RoomLog, RoomLogStateEnum> stateColumn;
+
+    @FXML
+    private TableColumn<RoomLog, String> buyNowPriceColumn;
 
     @FXML
     private TableColumn<RoomLog, Void> actionColumn;
@@ -44,6 +50,9 @@ public class TableViewRoomLogController implements Initializable {
         timestampColumn.setCellValueFactory(new PropertyValueFactory<>("timestamp"));
         stateColumn.setCellValueFactory(new PropertyValueFactory<>("state"));
         itemIdColumn.setCellValueFactory(new PropertyValueFactory<>("itemId"));
+        itemNameColumn.setCellValueFactory(new PropertyValueFactory<>("itemName"));
+        buyNowPriceColumn.setCellValueFactory(new PropertyValueFactory<>("buyNowPrice"));
+
         roomLogTableView.getProperties().put("controller", this);
     }
 

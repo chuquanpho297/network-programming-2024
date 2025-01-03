@@ -4,6 +4,7 @@ import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -77,7 +78,9 @@ public class OwnedRoomController extends Controller implements Initializable {
                         joinButton.setOnAction((event) -> {
                             Room room = getTableView().getItems().get(getIndex());
                             try {
-                                RoomLogController roomLogController = new RoomLogController(OwnedRoomController.this.getStage(), "room/room_log.fxml",room, OwnedRoomController.this);
+                                RoomLogController roomLogController = new RoomLogController(
+                                        OwnedRoomController.this.getStage(), "room/room_log.fxml", room,
+                                        OwnedRoomController.this);
                                 roomLogController.setMainController(OwnedRoomController.this.mainController);
                                 roomLogController.show();
                             } catch (IOException e) {
@@ -85,11 +88,11 @@ public class OwnedRoomController extends Controller implements Initializable {
                                 e.printStackTrace();
                             }
                             // try {
-                            //     // switchToScreenNotStyle((Stage) joinButton.getScene().getWindow(),
-                            //     //         "room/room_log.fxml",
-                            //     //         new RoomLogController(room));
+                            // // switchToScreenNotStyle((Stage) joinButton.getScene().getWindow(),
+                            // // "room/room_log.fxml",
+                            // // new RoomLogController(room));
                             // } catch (IOException e) {
-                            //     e.printStackTrace();
+                            // e.printStackTrace();
                             // }
                         });
                     }
@@ -102,7 +105,12 @@ public class OwnedRoomController extends Controller implements Initializable {
                         if (empty) {
                             setGraphic(null);
                         } else {
-                            setGraphic(pane);
+                            Room room = getTableView().getItems().get(getIndex());
+                            if (room.getStartTime().isBefore(LocalDateTime.now())) {
+                                setGraphic(null);
+                            } else {
+                                setGraphic(pane);
+                            }
                         }
                     }
                 };

@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import com.networking.auction.controller.Controller;
 import com.networking.auction.models.Room;
 import com.networking.auction.protocol.response.room.GetAllRoomResponse;
+import com.networking.auction.protocol.response.room.JoinRoomResponse;
 import com.networking.auction.service.RoomService;
 import com.networking.auction.util.JavaFxUtil;
 
@@ -59,15 +60,46 @@ public class RoomController extends Controller implements Initializable {
                     {
                         joinButton.setOnAction((event) -> {
                             Room room = getTableView().getItems().get(getIndex());
-                            try {
-                                AuctionRoomController auctionRoomController = new AuctionRoomController(
-                                        RoomController.this.getStage(), "room/auction_room.fxml", room,
-                                        progressIndicator, RoomController.this);
-                                auctionRoomController.setMainController(RoomController.this.mainController);
-                                auctionRoomController.show();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            Task<JoinRoomResponse> task = new Task<>() {
+                                @Override
+                                protected JoinRoomResponse call() {
+                                    return roomService.joinRoom(room.getRoomId());
+                                }
+                            };
+                            task.setOnRunning((e) -> {
+                                joinButton.setDisable(true);
+                                joinButton.setText("Joining...");
+                                progressIndicator.setVisible(true);
+                            });
+
+                            task.setOnSucceeded((e) -> {
+                                JoinRoomResponse response = task.getValue();
+                                try {
+                                    if (response == null || response.getStatusCode() == 0) {
+                                        JavaFxUtil.createAlert("Error Dialog", "Join Room Error",
+                                                "Failed to join room");
+                                        return;
+                                    }
+                                    joinButton.setDisable(false);
+                                    joinButton.setText("Join Room");
+                                    progressIndicator.setVisible(false);
+                                    AuctionRoomController auctionRoomController = new AuctionRoomController(
+                                            RoomController.this.getStage(), "room/auction_room.fxml", room,
+                                            progressIndicator, RoomController.this);
+                                    auctionRoomController.setMainController(RoomController.this.mainController);
+                                    auctionRoomController.show();
+
+                                } catch (IOException ex) {
+                                    ex.printStackTrace();
+                                }
+                            });
+
+                            task.setOnFailed((e) -> {
+                                joinButton.setDisable(false);
+                                joinButton.setText("Join Room");
+                                progressIndicator.setVisible(false);
+                            });
+                            new Thread(task).start();
                         });
                     }
 

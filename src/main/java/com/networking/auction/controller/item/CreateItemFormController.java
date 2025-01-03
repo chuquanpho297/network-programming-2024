@@ -12,7 +12,6 @@ import com.networking.auction.util.JavaFxUtil;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -61,7 +60,7 @@ public class CreateItemFormController extends Controller implements Initializabl
             float buyNowPrice = Float.parseFloat(buyNowPriceField.getText());
 
             if (name.isEmpty()) {
-                JavaFxUtil.createAlert("Error Dialog", "Room Error", "Invalid input");
+                JavaFxUtil.createAlert("Error Dialog", "Item Error", "Invalid input");
                 return;
             }
 

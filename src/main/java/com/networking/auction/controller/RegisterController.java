@@ -13,13 +13,11 @@ import com.networking.auction.util.JavaFxUtil;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 public class RegisterController extends Controller implements Initializable {
 
@@ -73,6 +71,7 @@ public class RegisterController extends Controller implements Initializable {
                             Thread.sleep(500);
                             LoginController loginController = new LoginController("login/index.fxml");
                             loginController.show();
+                            this.getStage().close();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -101,6 +100,7 @@ public class RegisterController extends Controller implements Initializable {
             try {
                 LoginController loginController = new LoginController("login/index.fxml");
                 loginController.show();
+                this.getStage().close();
             } catch (Exception e) {
                 e.printStackTrace();
             }

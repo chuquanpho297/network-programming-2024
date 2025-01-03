@@ -6,12 +6,10 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import com.networking.auction.controller.Controller;
-import com.networking.auction.controller.TableViewRoomLogController;
-import com.networking.auction.models.Item;
-import com.networking.auction.models.Item.ItemStateEnum;
-import com.networking.auction.models.RoomLog.RoomLogStateEnum;
 import com.networking.auction.models.Room;
 import com.networking.auction.models.RoomLog;
+import com.networking.auction.models.RoomLog.RoomLogStateEnum;
+import com.networking.auction.protocol.response.room.AcceptRejectItemResponse;
 import com.networking.auction.protocol.response.room.GetRoomLogResponse;
 import com.networking.auction.service.RoomService;
 import com.networking.auction.util.JavaFxUtil;
@@ -21,8 +19,6 @@ import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
@@ -62,19 +58,19 @@ public class RoomLogController extends Controller implements Initializable {
         titleLabel.setText(room.getRoomName());
         this.setPreviousController(prev);
 
-        getRoomLogData();
-        addButtonsToTable();
-        
     }
-    
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Initialize table columns if needed
         tableViewRoomLogController = (TableViewRoomLogController) roomLogTableView.getProperties()
-        .get("controller");
+                .get("controller");
         backBtn.setOnAction(this::handleBackButton);
         progressIndicator.setVisible(true);
         totalRequestLabel.setText("Total request: " + 1);
+
+        getRoomLogData();
+        addButtonsToTable();
     }
 
     @FXML
@@ -134,11 +130,12 @@ public class RoomLogController extends Controller implements Initializable {
                     {
                         addButton.setOnAction((e) -> {
                             RoomLog item = getTableView().getItems().get(getIndex());
-                            // Add item to room
+                            acceptRejectItem(item, true);
                         });
 
                         rejectButton.setOnAction((e) -> {
                             RoomLog item = getTableView().getItems().get(getIndex());
+                            acceptRejectItem(item, false);
                             // Reject item
                         });
 
@@ -162,6 +159,34 @@ public class RoomLogController extends Controller implements Initializable {
         };
         tableViewRoomLogController.getActionColumn().setCellFactory(cellFactory);
         // Add the column to the table (assuming you have a column to add this to)
+    }
+
+    public void acceptRejectItem(RoomLog item, boolean isAccept) {
+        Task<AcceptRejectItemResponse> task = new Task<AcceptRejectItemResponse>() {
+            @Override
+            protected AcceptRejectItemResponse call() throws Exception {
+                return roomService.acceptRejectItem(item.getRoomId(), item.getItemId(), isAccept);
+            }
+
+        };
+
+        task.setOnSucceeded((e) -> {
+            AcceptRejectItemResponse response = task.getValue();
+            if (response == null || response.getStatusCode() == 0) {
+                JavaFxUtil.createAlert("Error Dialog", "Item Error", "Failed to get item list");
+                return;
+            }
+            // Update the item state
+            item.setState(isAccept ? RoomLogStateEnum.ACCEPTED : RoomLogStateEnum.REJECTED);
+            // Refresh the table view
+            tableViewRoomLogController.getRoomLogTableView().refresh();
+        });
+
+        task.setOnFailed((e) -> {
+            progressIndicator.setVisible(false);
+            JavaFxUtil.createAlert("Error Dialog", "Item Error", "Failed to get item list");
+        });
+        new Thread(task).start();
     }
 
 }

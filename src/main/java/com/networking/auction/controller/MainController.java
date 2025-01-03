@@ -24,7 +24,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 public class MainController extends Controller implements Initializable {
     @FXML
@@ -138,6 +137,9 @@ public class MainController extends Controller implements Initializable {
                 StateManager.getInstance().setRoomId(Optional.empty());
                 StateManager.getInstance().setMainFxmlPath(Optional.empty());
 
+                LoginController loginController = new LoginController("login/index.fxml");
+                loginController.show();
+                this.getStage().close();
             } catch (Exception e) {
                 e.printStackTrace();
             }

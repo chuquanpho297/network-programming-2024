@@ -44,9 +44,9 @@ public class ItemService {
         return null;
     }
 
-    public GetAllOwnedItemResponse getAllOwnedItems() {
+    public GetAllOwnedItemResponse getAllOwnedItems(int checkIsPlaced) {
         try {
-            GetAllOwnedItemRequest request = new GetAllOwnedItemRequest();
+            GetAllOwnedItemRequest request = new GetAllOwnedItemRequest(checkIsPlaced);
             String rawResponse = TCPClient.fetchServer(request.toString());
             GetAllOwnedItemResponse response = GetAllOwnedItemResponse.parseResponse(rawResponse);
             return response;

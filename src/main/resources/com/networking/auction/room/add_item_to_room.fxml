@@ -7,43 +7,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="addItemToRoomScreen" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="addItemToRoomScreen" prefHeight="800.0" prefWidth="1200.0"
+    xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <HBox fx:id="header" alignment="CENTER_LEFT" prefHeight="74.0" prefWidth="1200.0">
-        <Button fx:id="backBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" text="Back" />
-      <Region prefHeight="74.0" prefWidth="30.0" />
-        <Label fx:id="titleLabel" alignment="CENTER" prefHeight="74.0" text="Item list">
+        <Button fx:id="backBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"
+            prefHeight="40.0" prefWidth="120.0" text="Back" />
+        <Region prefHeight="74.0" prefWidth="30.0" />
+        <Label fx:id="titleLabel" alignment="CENTER" prefHeight="74.0" text="Add Item To Room">
             <font>
                 <Font size="20.0" />
             </font>
         </Label>
         <Region HBox.hgrow="ALWAYS" />
-      <Button fx:id="createItemBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="117.0" text="Add Item" />
-      <Region prefHeight="74.0" prefWidth="74.0" />
     </HBox>
     <HBox prefHeight="100.0" prefWidth="200.0">
-        <children>
-         <Region prefHeight="100.0" prefWidth="232.0" />
-            <Label prefHeight="100.0" prefWidth="125.0" text="Next item: ">
-            <font>
-               <Font size="21.0" />
-            </font></Label>
-         <Label prefHeight="100.0" prefWidth="125.0">
-            <font>
-               <Font size="21.0" />
-            </font>
-         </Label>
-         <Region prefHeight="100.0" prefWidth="232.0" />
-         <Label prefHeight="100.0" prefWidth="125.0" text="Time Left:">
-            <font>
-               <Font size="21.0" />
-            </font>
-         </Label>
-         <Label fx:id="countdownLabel" prefHeight="100.0" prefWidth="125.0">
-                <font>
-                    <Font size="21.0" />
-                </font>
-            </Label>
-        </children>
+
     </HBox>
-    <fx:include fx:id="itemTableView" maxHeight="576.0" minHeight="576.0" prefHeight="576.0" source="../item/item_table_view.fxml" />
+    <fx:include fx:id="itemTableView" maxHeight="576.0" minHeight="576.0" prefHeight="576.0"
+        source="../item/item_table_view.fxml" />
 </VBox>

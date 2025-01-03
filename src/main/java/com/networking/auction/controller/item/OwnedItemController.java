@@ -24,8 +24,8 @@ import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
@@ -35,7 +35,6 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -113,7 +112,7 @@ public class OwnedItemController extends Controller implements Initializable {
                                         OwnedItemController.this.getStage(), "item/update_item.fxml",
                                         OwnedItemController.this);
                                 updateItemController.setMainController(OwnedItemController.this.mainController);
-                            
+
                                 updateItemController.show();
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -189,7 +188,7 @@ public class OwnedItemController extends Controller implements Initializable {
         Task<GetAllOwnedItemResponse> loadDataTask = new Task<>() {
             @Override
             protected GetAllOwnedItemResponse call() {
-                return itemService.getAllOwnedItems();
+                return itemService.getAllOwnedItems(0);
             }
         };
 

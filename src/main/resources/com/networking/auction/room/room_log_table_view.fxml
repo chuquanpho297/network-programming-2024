@@ -3,9 +3,14 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 
-<TableView fx:id="roomTableView" layoutY="9.0" maxHeight="600.0" minHeight="600.0" prefHeight="600.0" prefWidth="1032.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<TableView fx:id="roomLogTableView" layoutY="9.0" maxHeight="600.0" minHeight="600.0"
+    prefHeight="600.0" prefWidth="1032.0" xmlns="http://javafx.com/javafx/23.0.1"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.networking.auction.controller.room.TableViewRoomLogController">
     <columns>
-        <TableColumn fx:id="itemIdColumn" prefWidth="150.0" text="Item ID" />
+        <TableColumn fx:id="logIdColumn" prefWidth="150.0" text="Log ID" />
+        <TableColumn fx:id="itemIdColumn" prefWidth="150.0" visible="false" />
+        <TableColumn fx:id="roomIdColumn" prefWidth="150.0" visible="false" />
         <TableColumn fx:id="itemNameColumn" prefWidth="150.0" text="Item Name" />
         <TableColumn fx:id="buyNowPriceColumn" text="Buy Now Price" />
         <TableColumn fx:id="timestampColumn" text="Updated At" />
